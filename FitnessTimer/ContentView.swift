@@ -10,54 +10,98 @@ import SwiftUI
 struct ContentView: View {
     var body: some View {
         VStack {
-            Image(systemName: "globe")
-                .imageScale(.large)
-                .foregroundStyle(.tint)
-            Text("Hello, world!")
+            Spacer()
+            TimeDisplay()
+            Spacer()
+            Spacer()
+            ButtonRow()
         }
-        .frame(maxHeight: .infinity)
-        .padding()
-        
-        ButtonRow()
+        .frame(maxWidth: .infinity, maxHeight: .infinity)
+        .background(.black)
+    }
+}
+
+struct TimeDisplay: View {
+    var body: some View {
+        ZStack {
+            Circle()
+                .stroke(.gray, style: StrokeStyle(lineWidth: 10))
+
+            Text("Hello, World!")
+                .font(.largeTitle)
+                .foregroundStyle(.white)
+        }
+        .safeAreaPadding()
     }
 }
 
 struct ButtonRow: View  {
+    let customGray = Color(red: 0.30, green: 0.30, blue: 0.30)
+    let lineWidth: CGFloat = 2
     var body: some View {
         HStack {
             Button(action: restartTimer) {
-                Text("Restart")
+                Image(systemName: "arrow.uturn.backward")
+                    .font(.title2)
+                    .padding(15)
+                    .background(Color.black)
+                    .clipShape(Circle())
+                    .overlay(
+                        Circle().stroke(.gray, lineWidth: lineWidth)
+                    )
             }
+            .foregroundStyle(.white)
+            .buttonBorderShape(.circle)
             .buttonStyle(.bordered)
-            .padding()
-            
+
+            Spacer()
+
             Button(action: startOrStopTimer) {
-                Text("Play/Pause")
+                // TODO: Make the title of this button dynamic based upon the status of the timer
+                Text(String(localized: "START"))
+                    .font(.callout)
+                    .foregroundStyle(.white)
+                    .padding(.vertical, 20)
+                    .padding(.horizontal, 50)
+                    .background(customGray)
+                    .cornerRadius(50)
             }
-            .buttonStyle(.bordered)
-            .padding()
-            
+            .buttonBorderShape(.capsule)
+            .offset(y: -20)
+
+            Spacer()
+
             Button(action: goToSettings) {
-                Text("Settings")
+                Image(systemName: "gearshape")
+                    .font(.title)
+                    .padding(5)
             }
+            .buttonBorderShape(.circle)
             .buttonStyle(.bordered)
+            .foregroundStyle(.white)
+            .clipShape(Circle())
+            .overlay(
+                Circle().stroke(.gray, lineWidth: lineWidth)
+            )
         }
+        .padding(.bottom, 20)
+        .safeAreaPadding()
     }
-    
+
     private func restartTimer() {
-        
+
     }
-    
+
     private func startOrStopTimer() {
-        
+
     }
-    
+
     private func goToSettings() {
-        
+
     }
 }
 
 
-//#Preview {
-//    ContentView()
-//}
+#Preview {
+    ContentView()
+}
