@@ -5,11 +5,11 @@
 //  Created by James Dunn on 10/5/24.
 //
 
-
+import Combine
 import SwiftUI
 
 struct TimerView: View {
-    @State private var timer: Double = 0.0
+    @EnvironmentObject private var timerStateManager: TimerStateManager
 
     var body: some View {
         ZStack {
@@ -17,7 +17,7 @@ struct TimerView: View {
                 .stroke(.gray, style: StrokeStyle(lineWidth: 10))
 
             // Update string to use NumberFormatter
-            Text(String(format: "%2f", timer))
+            Text(timerStateManager.time.description)
                 .font(.largeTitle)
                 .foregroundStyle(.white)
         }

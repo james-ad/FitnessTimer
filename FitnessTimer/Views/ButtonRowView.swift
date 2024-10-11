@@ -5,12 +5,14 @@
 //  Created by James Dunn on 10/5/24.
 //
 
-
+import Combine
 import SwiftUI
 
 struct ButtonRowView: View  {
-    let customGray = Color(red: 0.30, green: 0.30, blue: 0.30)
-    let lineWidth: CGFloat = 2
+    @EnvironmentObject private var timerStateManager: TimerStateManager
+    private let customGray = Color(red: 0.30, green: 0.30, blue: 0.30)
+    private let lineWidth: CGFloat = 2
+
     var body: some View {
         HStack {
             Button(action: restartTimer) {
@@ -30,8 +32,7 @@ struct ButtonRowView: View  {
             Spacer()
 
             Button(action: startOrStopTimer) {
-                // TODO: Make the title of this button dynamic based upon the status of the timer
-                Text(String(localized: "START"))
+                Text(timerStateManager.buttonTitle)
                     .font(.callout)
                     .foregroundStyle(.white)
                     .padding(.vertical, 20)
@@ -62,14 +63,22 @@ struct ButtonRowView: View  {
     }
 
     private func restartTimer() {
-
+        timerStateManager.resetTimer()
     }
 
     private func startOrStopTimer() {
-
+        if timerStateManager.isRunning {
+            timerStateManager.stopTimer()
+        } else {
+            timerStateManager.startTiimer()
+        }
     }
 
     private func goToSettings() {
 
     }
+}
+
+#Preview {
+    ContentView()
 }
