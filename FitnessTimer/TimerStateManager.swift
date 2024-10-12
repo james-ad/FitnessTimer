@@ -9,7 +9,7 @@ import Combine
 import SwiftUI
 
 class TimerStateManager: ObservableObject {
-    @Published var time: Float = 0
+    @Published var time: Int = 0
     private var cancellable: Cancellable?
     @Published var buttonTitle: String = "Start"
     @Published var isRunning: Bool = false
@@ -45,4 +45,8 @@ class TimerStateManager: ObservableObject {
     func resetTimer() {
         time = 0
     }
+}
+
+#Preview {
+    ContentView()
 }
