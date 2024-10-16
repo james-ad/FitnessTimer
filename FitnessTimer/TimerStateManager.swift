@@ -17,6 +17,9 @@ class TimerStateManager: ObservableObject {
     @Published var isFinished: Bool = false
     @Published var roundNumber: Int = 0
 
+    // TODO: Consider adding this UI, or just for keeping track of # of rounds
+//    @Published var totalRounds: Int = 0
+
     private var cancellable: Cancellable?
 
     func startTimer() {
