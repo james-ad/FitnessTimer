@@ -72,12 +72,14 @@ struct ButtonRowView: View  {
             if timerStateManager.isRunning {
                 timerStateManager.stopTimer()
             } else {
-                timerStateManager.startTiimer()
+                timerStateManager.startTimer()
             }
         }
     }
 
     struct SettingsButton: View {
+        @State var settingsMenuIsOpen: Bool = false
+
         var body: some View {
             Button(action: goToSettings) {
                 Image(systemName: "gearshape")
@@ -91,10 +93,14 @@ struct ButtonRowView: View  {
             .overlay(
                 Circle().stroke(.gray, lineWidth: Constants.lineWidth)
             )
+            .sheet(isPresented: $settingsMenuIsOpen) {
+                SettingsView()
+            }
+
         }
 
         private func goToSettings() {
-
+            settingsMenuIsOpen.toggle()
         }
     }
 

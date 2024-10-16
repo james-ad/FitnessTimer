@@ -10,20 +10,16 @@ import SwiftUI
 
 class TimerStateManager: ObservableObject {
     @Published var time: Int = 0
-    private var cancellable: Cancellable?
-    @Published var buttonTitle: String = "Start"
+    @Published var buttonTitle: String = "START"
     @Published var isRunning: Bool = false
     // Might need pause status later to distinguish between pause and stop
     @Published var isPaused: Bool = false
     @Published var isFinished: Bool = false
-    // 1. Tap button, start timer if not running
-        // 1a. If timer is running, stop timer
-    // 2. The timer should only be running if isRunning is true
-        // 2a. isRunning -> Timer.update()
-        // 2b. !isRunning -> Timer.cancel()
-        // 2c. Actual value displayed on screen is separate from the resetting and incrementing of the timer
+    @Published var roundNumber: Int = 0
 
-    func startTiimer() {
+    private var cancellable: Cancellable?
+
+    func startTimer() {
         cancellable = Timer
             .publish(every: 1, on: .main, in: .common)
             .autoconnect()
@@ -32,14 +28,14 @@ class TimerStateManager: ObservableObject {
             }
 
         isRunning = true
-        buttonTitle = "PAUSE"
+        buttonTitle = String(localized: "PAUSE")
     }
 
     func stopTimer() {
         cancellable?.cancel()
         cancellable = nil
         isRunning = false
-        buttonTitle = "START"
+        buttonTitle = String(localized: "START")
     }
 
     func resetTimer() {
