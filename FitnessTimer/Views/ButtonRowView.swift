@@ -10,11 +10,27 @@ import SwiftUI
 
 struct ButtonRowView: View  {
     @EnvironmentObject private var timerStateManager: TimerStateManager
-    private let customGray = Color(red: 0.30, green: 0.30, blue: 0.30)
-    private let lineWidth: CGFloat = 2
 
     var body: some View {
         HStack {
+            RestartButon()
+            Spacer()
+
+            StartStopButton()
+            Spacer()
+
+            SettingsButton()
+        }
+        .padding(.bottom, 20)
+        .safeAreaPadding()
+    }
+
+
+    // MARK: Button Views
+    struct RestartButon: View {
+        @EnvironmentObject private var timerStateManager: TimerStateManager
+
+        var body: some View {
             Button(action: restartTimer) {
                 Image(systemName: "arrow.uturn.backward")
                     .font(.title2)
@@ -22,29 +38,47 @@ struct ButtonRowView: View  {
                     .background(Color.black)
                     .clipShape(Circle())
                     .overlay(
-                        Circle().stroke(.gray, lineWidth: lineWidth)
+                        Circle().stroke(.gray, lineWidth: Constants.lineWidth)
                     )
             }
             .foregroundStyle(.white)
             .buttonBorderShape(.circle)
             .buttonStyle(.bordered)
+        }
 
-            Spacer()
+        private func restartTimer() {
+            timerStateManager.resetTimer()
+        }
+    }
 
+    struct StartStopButton: View {
+        @EnvironmentObject private var timerStateManager: TimerStateManager
+
+        var body: some View {
             Button(action: startOrStopTimer) {
                 Text(timerStateManager.buttonTitle)
                     .font(.callout)
                     .foregroundStyle(.white)
                     .padding(.vertical, 20)
                     .padding(.horizontal, 50)
-                    .background(customGray)
+                    .background(Constants.customGray)
                     .cornerRadius(50)
             }
             .buttonBorderShape(.capsule)
             .offset(y: -20)
+        }
 
-            Spacer()
+        private func startOrStopTimer() {
+            if timerStateManager.isRunning {
+                timerStateManager.stopTimer()
+            } else {
+                timerStateManager.startTiimer()
+            }
+        }
+    }
 
+    struct SettingsButton: View {
+        var body: some View {
             Button(action: goToSettings) {
                 Image(systemName: "gearshape")
                     .font(.title)
@@ -55,30 +89,24 @@ struct ButtonRowView: View  {
             .foregroundStyle(.white)
             .clipShape(Circle())
             .overlay(
-                Circle().stroke(.gray, lineWidth: lineWidth)
+                Circle().stroke(.gray, lineWidth: Constants.lineWidth)
             )
         }
-        .padding(.bottom, 20)
-        .safeAreaPadding()
-    }
 
-    private func restartTimer() {
-        timerStateManager.resetTimer()
-    }
+        private func goToSettings() {
 
-    private func startOrStopTimer() {
-        if timerStateManager.isRunning {
-            timerStateManager.stopTimer()
-        } else {
-            timerStateManager.startTiimer()
         }
     }
 
-    private func goToSettings() {
-
-    }
 }
+
+enum Constants {
+    static let customGray = Color(red: 0.30, green: 0.30, blue: 0.30)
+    static let lineWidth: CGFloat = 2
+}
+
 
 #Preview {
     ContentView()
 }
+
