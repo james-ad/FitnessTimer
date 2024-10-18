@@ -27,6 +27,7 @@ extension TimeDisplaying {
                 timerStateManager.restTime
         }
     }
+
     var timeDisplayed: String {
         let hours = timeKeeper / 3600
         let minutes = (timeKeeper % 3600) / 60
