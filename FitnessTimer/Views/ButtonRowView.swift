@@ -106,7 +106,7 @@ struct ButtonRowView: View  {
 
 }
 
-enum Constants {
+fileprivate enum Constants {
     static let customGray = Color(red: 0.30, green: 0.30, blue: 0.30)
     static let lineWidth: CGFloat = 2
 }

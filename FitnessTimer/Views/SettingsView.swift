@@ -7,9 +7,8 @@
 
 import SwiftUI
 
-struct SettingsView: View {
+struct SettingsView: View  {
     @Environment(\.dismiss) var dismiss
-    @EnvironmentObject var timerStateManager: TimerStateManager
     private let title = String(localized: "Settings")
 
     var body: some View {
@@ -45,18 +44,11 @@ struct SettingsView: View {
             Spacer()
 
             VStack(spacing: 20) {
-                Button(action: { print("Button tapped") }) {
-                    Text("Round time")
-                        .font(.title)
-                        .foregroundStyle(.white)
-                }
+                RoundTimeView()
 
                 // TODO: CHANGE BUTTON STYLING FOR BOTH BUTTONS
 
-                Button(action: { print("Button tapped") }) {
-                    Text("Rest time")
-                        .font(.title)
-                }
+                RestTimeView()
             }
             Spacer()
 
@@ -64,6 +56,42 @@ struct SettingsView: View {
         .frame(maxWidth: .infinity, maxHeight: .infinity)
         .safeAreaPadding()
         .background(.black)
+    }
+}
+
+struct RoundTimeView: View, TimeDisplaying {
+    @EnvironmentObject var timerStateManager: TimerStateManager
+    var timerType: TimerType = .roundTimer
+
+    var body: some View {
+        HStack {
+            Text("Round time: ")
+                .font(.title)
+                .foregroundStyle(.white)
+
+            Text("\(timeDisplayed)")
+                .font(.title)
+                .foregroundStyle(.white)
+            //                    Slider(value: $timerStateManager.roundTime, in: 1...10) {
+            //
+        }
+    }
+}
+
+struct RestTimeView: View, TimeDisplaying {
+    @EnvironmentObject var timerStateManager: TimerStateManager
+    var timerType: TimerType = .restTimer
+
+    var body: some View {
+        HStack {
+            Button(action: { print("Button tapped") }) {
+                Text("Rest time: ")
+                    .font(.title)
+
+                Text("\(timeDisplayed)")
+                    .font(.title)
+            }
+        }
     }
 }
 

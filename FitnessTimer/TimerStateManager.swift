@@ -9,13 +9,15 @@ import Combine
 import SwiftUI
 
 class TimerStateManager: ObservableObject {
-    @Published var time: Int = 0
+    @Published var totalSeconds: Int = 0
     @Published var buttonTitle: String = "START"
     @Published var isRunning: Bool = false
     // Might need pause status later to distinguish between pause and stop
     @Published var isPaused: Bool = false
     @Published var isFinished: Bool = false
     @Published var roundNumber: Int = 0
+    @Published var roundTime: Int = 0
+    @Published var restTime: Int = 0
 
     // TODO: Consider adding this UI, or just for keeping track of # of rounds
 //    @Published var totalRounds: Int = 0
@@ -27,7 +29,7 @@ class TimerStateManager: ObservableObject {
             .publish(every: 1, on: .main, in: .common)
             .autoconnect()
             .sink { [weak self] _ in
-                self?.time += 1
+                self?.totalSeconds += 1
             }
 
         isRunning = true
@@ -42,7 +44,7 @@ class TimerStateManager: ObservableObject {
     }
 
     func resetTimer() {
-        time = 0
+        totalSeconds = 0
     }
 }
 

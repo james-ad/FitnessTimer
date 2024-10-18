@@ -8,18 +8,9 @@
 import Combine
 import SwiftUI
 
-struct TimerView: View {
-    @EnvironmentObject private var timerStateManager: TimerStateManager
-    private var timeDisplayed: String {
-        let hours = timerStateManager.time / 3600
-        let minutes = (timerStateManager.time % 3600) / 60
-        let seconds = timerStateManager.time % 60
-        if hours < 1 {
-            return String(format: "%02d:%02d", minutes, seconds)
-        } else {
-            return String(format: "%i:%02d:%02d", hours, minutes, seconds)
-        }
-    }
+struct TimerView: View, TimeDisplaying {
+    @EnvironmentObject var timerStateManager: TimerStateManager
+    var timerType: TimerType = .currentTimer
 
     var body: some View {
         ZStack {
