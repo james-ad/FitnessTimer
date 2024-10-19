@@ -59,6 +59,8 @@ struct SettingsView: View  {
     }
 }
 
+
+// TODO: SEE ABOUT MAKING THIS A REUSABLE VIEW SINCE THE LAYOUT IS IDENTICAL MINUS THE DATA AND TRACKED TIMER
 struct RoundTimeView: View, TimeDisplaying {
     @EnvironmentObject var timerStateManager: TimerStateManager
     var timerType: TimerType = .roundTimer
