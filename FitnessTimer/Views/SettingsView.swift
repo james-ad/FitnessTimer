@@ -43,13 +43,13 @@ struct SettingsView: View  {
             Spacer()
             Spacer()
 
-            VStack(spacing: 20) {
+            // MARK: Timer Settings
+            VStack(alignment: .leading, spacing: 20) {
+                // TODO: FIX ALIGNMENT SO TIME ROWS ARE LEFT-ALIGNED
                 RoundTimeView()
-
-                // TODO: CHANGE BUTTON STYLING FOR BOTH BUTTONS
-
                 RestTimeView()
             }
+            .safeAreaPadding()
             Spacer()
 
         }
@@ -65,6 +65,7 @@ struct RoundTimeView: View, TimeDisplaying {
 
     var body: some View {
         HStack {
+            Spacer()
             Text("Round time: ")
                 .font(.title)
                 .foregroundStyle(.white)
@@ -72,8 +73,13 @@ struct RoundTimeView: View, TimeDisplaying {
             Text("\(timeDisplayed)")
                 .font(.title)
                 .foregroundStyle(.white)
-            //                    Slider(value: $timerStateManager.roundTime, in: 1...10) {
-            //
+
+            Spacer()
+            Spacer()
+            Button(action: { print("Button tapped") }) {
+                Image(systemName: "chevron.forward")
+                    .imageScale(.large)
+            }
         }
     }
 }
@@ -82,14 +88,23 @@ struct RestTimeView: View, TimeDisplaying {
     @EnvironmentObject var timerStateManager: TimerStateManager
     var timerType: TimerType = .restTimer
 
+
     var body: some View {
         HStack {
-            Button(action: { print("Button tapped") }) {
-                Text("Rest time: ")
-                    .font(.title)
+            Spacer()
+            Text("Rest time: ")
+                .font(.title)
+                .foregroundStyle(.white)
 
-                Text("\(timeDisplayed)")
-                    .font(.title)
+            Text("\(timeDisplayed)")
+                .font(.title)
+                .foregroundStyle(.white)
+
+            Spacer()
+            Spacer()
+            Button(action: { print("Button tapped") }) {
+                Image(systemName: "chevron.forward")
+                    .imageScale(.large)
             }
         }
     }
@@ -97,4 +112,5 @@ struct RestTimeView: View, TimeDisplaying {
 
 #Preview {
     SettingsView()
+        .environmentObject(TimerStateManager())
 }
