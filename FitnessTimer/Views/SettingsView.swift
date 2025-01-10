@@ -47,8 +47,8 @@ struct SettingsView: View  {
             VStack(alignment: .leading, spacing: 20) {
                 // TODO: FIX ALIGNMENT SO TIME ROWS ARE LEFT-ALIGNED
                 // The negative leading padding is a temporary fix
-                RoundTimeView()
-                RestTimeView()
+                SettingsTimerView(timerType: .roundTimer)
+                SettingsTimerView(timerType: .restTimer)
                     .padding(.leading, -10)
             }
             .safeAreaPadding()
@@ -61,19 +61,18 @@ struct SettingsView: View  {
     }
 }
 
-
-// TODO: SEE ABOUT MAKING THIS A REUSABLE VIEW SINCE THE LAYOUT FOR ROUND AND REST TIME IS IDENTICAL EXCEPT FOR THE DATA AND TIMER BEING TRACKED
-struct RoundTimeView: View, TimeDisplaying {
+struct SettingsTimerView: View, TimeDisplaying {
     @EnvironmentObject var timerStateManager: TimerStateManager
-    @State var editModeEnabled: Bool = false
-    @State var minutesSelected: Int = 0
-    @State var secondsSelected: Int = 0
-    var timerType: TimerType = .roundTimer
+    @State private var editModeEnabled: Bool = false
+    var timerType: TimerType
+    private var title: String {
+        timerType == .roundTimer ? "Round time" : "Rest time"
+    }
 
     var body: some View {
         HStack {
             Spacer()
-            Text("Round time: ")
+            Text(title)
                 .font(.title)
                 .foregroundStyle(.white)
 
@@ -88,59 +87,42 @@ struct RoundTimeView: View, TimeDisplaying {
                     .imageScale(.large)
             }
             .sheet(isPresented: $editModeEnabled) {
-                HStack {
-                    HStack {
-                        Text("Minutes: ")
-                        Picker("Minutes", selection: $minutesSelected) {
-                            ForEach(0..<60, id: \.self) { number in
-                                Text("\(number)").tag(number)
-                                    .foregroundStyle(.black)
-                            }
-                            .pickerStyle(.wheel)
-                            .frame(maxWidth: .infinity, maxHeight: 300)
-                        }
-                    }
-
-                    HStack {
-                        Text("Seconds: ")
-                        Picker("Seconds", selection: $secondsSelected) {
-                            ForEach(0..<60, id: \.self) { number in
-                                Text("\(number)").tag(number)
-                            }
-                            .pickerStyle(.wheel)
-                            .frame(maxWidth: .infinity, maxHeight: 300)
-                        }
-                    }
-                }
-                .background(.clear)
+                TimeSelector()
             }
         }
     }
 }
 
-struct RestTimeView: View, TimeDisplaying {
-    @EnvironmentObject var timerStateManager: TimerStateManager
-    var timerType: TimerType = .restTimer
-
+struct TimeSelector: View {
+    @State var minutesSelected: Int = 0
+    @State var secondsSelected: Int = 0
 
     var body: some View {
         HStack {
-            Spacer()
-            Text("Rest time: ")
-                .font(.title)
-                .foregroundStyle(.white)
+            HStack {
+                Text("Minutes: ")
+                Picker("Minutes", selection: $minutesSelected) {
+                    ForEach(0..<60, id: \.self) { number in
+                        Text("\(number)").tag(number)
+                            .foregroundStyle(.black)
+                    }
+                    .pickerStyle(.wheel)
+                    .frame(maxWidth: .infinity, maxHeight: 300)
+                }
+            }
 
-            Text("\(timeDisplayed)")
-                .font(.title)
-                .foregroundStyle(.white)
-
-            Spacer()
-            Spacer()
-            Button(action: { print("Button tapped") }) {
-                Image(systemName: "chevron.forward")
-                    .imageScale(.large)
+            HStack {
+                Text("Seconds: ")
+                Picker("Seconds", selection: $secondsSelected) {
+                    ForEach(0..<60, id: \.self) { number in
+                        Text("\(number)").tag(number)
+                    }
+                    .pickerStyle(.wheel)
+                    .frame(maxWidth: .infinity, maxHeight: 300)
+                }
             }
         }
+        .background(.clear)
     }
 }
 
