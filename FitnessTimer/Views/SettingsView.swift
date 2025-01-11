@@ -13,55 +13,50 @@ struct SettingsView: View  {
 
     var body: some View {
         VStack {
-            HStack(spacing: 65){
-                Text(title)
-                    .kerning(3)
-                    .font(.largeTitle)
-                    .fontWeight(.light)
-                    .foregroundStyle(.white)
+            Spacer()
 
-                Button(action: {
-                    print("Button tapped")
-                    dismiss()
-                }) {
-                    Image(systemName: "xmark.circle.fill")
-                        .resizable()
-                        .aspectRatio(contentMode: .fit)
-                        .frame(width: 45, height: 45)
-                        .foregroundStyle(.black)
-                        .background(.white)
-                        .clipShape(.circle)
-                        .overlay {
-                            Circle()
-                                .stroke(Color.gray, lineWidth: 3)
-                        }
-                }
-            }
-            .offset(x: 56, y: 20)
-            .safeAreaPadding()
+            Text(title)
+                .kerning(3)
+                .font(.largeTitle)
+                .fontWeight(.light)
+                .foregroundStyle(.white)
+                .frame(maxWidth: .infinity, alignment: .center)
+                .safeAreaPadding()
 
             Spacer()
             Spacer()
 
             // MARK: Timer Settings
             VStack(alignment: .leading, spacing: 20) {
-                // TODO: FIX ALIGNMENT SO TIME ROWS ARE LEFT-ALIGNED
-                // The negative leading padding is a temporary fix
                 SettingsTimerView(timerType: .roundTimer)
                 SettingsTimerView(timerType: .restTimer)
-                    .padding(.leading, -10)
+                    .padding(-1)
             }
             .safeAreaPadding()
+
             Spacer()
 
+            Button(action: {
+                print("Button tapped")
+                dismiss()
+            }) {
+                Text("Exit Settings")
+                    .font(.callout)
+                    .padding(12)
+                    .foregroundStyle(.black)
+                    .background(.white)
+                    .clipShape(RoundedRectangle(cornerRadius: 8))
+            }
+            .buttonBorderShape(.roundedRectangle)
+
+            Spacer()
         }
-        .frame(maxWidth: .infinity, maxHeight: .infinity)
         .safeAreaPadding()
         .background(.black)
     }
 }
 
-struct SettingsTimerView: View, TimeDisplaying {
+private struct SettingsTimerView: View, TimeDisplaying {
     @EnvironmentObject var timerStateManager: TimerStateManager
     @State private var editModeEnabled: Bool = false
     var timerType: TimerType
@@ -70,9 +65,9 @@ struct SettingsTimerView: View, TimeDisplaying {
     }
 
     var body: some View {
-        HStack {
+        HStack(alignment: .center) {
             Spacer()
-            Text(title)
+            Text("\(title): ")
                 .font(.title)
                 .foregroundStyle(.white)
 
@@ -80,51 +75,29 @@ struct SettingsTimerView: View, TimeDisplaying {
                 .font(.title)
                 .foregroundStyle(.white)
 
+            // TODO: See if there is a better way to handle this spacing
             Spacer()
             Spacer()
+            Spacer()
+            Spacer()
+            Spacer()
+            Spacer()
+            Spacer()
+            Spacer()
+
             Button(action: { editModeEnabled.toggle() }) {
                 Image(systemName: "chevron.forward")
                     .imageScale(.large)
             }
             .sheet(isPresented: $editModeEnabled) {
-                TimeSelector()
+                TimeSelectorView()
             }
         }
+        .background(.black)
+        .frame(maxWidth: .infinity, alignment: .leading)
     }
 }
 
-struct TimeSelector: View {
-    @State var minutesSelected: Int = 0
-    @State var secondsSelected: Int = 0
-
-    var body: some View {
-        HStack {
-            HStack {
-                Text("Minutes: ")
-                Picker("Minutes", selection: $minutesSelected) {
-                    ForEach(0..<60, id: \.self) { number in
-                        Text("\(number)").tag(number)
-                            .foregroundStyle(.black)
-                    }
-                    .pickerStyle(.wheel)
-                    .frame(maxWidth: .infinity, maxHeight: 300)
-                }
-            }
-
-            HStack {
-                Text("Seconds: ")
-                Picker("Seconds", selection: $secondsSelected) {
-                    ForEach(0..<60, id: \.self) { number in
-                        Text("\(number)").tag(number)
-                    }
-                    .pickerStyle(.wheel)
-                    .frame(maxWidth: .infinity, maxHeight: 300)
-                }
-            }
-        }
-        .background(.clear)
-    }
-}
 
 #Preview {
     SettingsView()

@@ -11,6 +11,7 @@ import SwiftUI
 struct ButtonRowView: View  {
     @EnvironmentObject private var timerStateManager: TimerStateManager
 
+    // MARK: Main button group view
     var body: some View {
         HStack {
             RestartButon()
@@ -26,7 +27,9 @@ struct ButtonRowView: View  {
     }
 
 
-    // MARK: Button Views
+    // Button Views
+
+    // MARK: Restart Button
     struct RestartButon: View {
         @EnvironmentObject private var timerStateManager: TimerStateManager
 
@@ -51,6 +54,7 @@ struct ButtonRowView: View  {
         }
     }
 
+    // MARK: Start/Stop button
     struct StartStopButton: View {
         @EnvironmentObject private var timerStateManager: TimerStateManager
 
@@ -77,6 +81,7 @@ struct ButtonRowView: View  {
         }
     }
 
+    // MARK: Settings button
     struct SettingsButton: View {
         @State var settingsMenuIsOpen: Bool = false
 
