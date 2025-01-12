@@ -16,28 +16,43 @@ struct TimerView: View, TimeDisplaying {
         ZStack {
             Circle()
                 .stroke(.gray, style: StrokeStyle(lineWidth: 10))
+                .zIndex(1)
 
-            VStack(spacing: 40) {
+            VStack(alignment: .center) {
+
                 Text(timeDisplayed)
-                    .kerning(2)
                     .font(.largeTitle)
                     .foregroundStyle(.white)
+                    .kerning(5)
+                    .offset(y: 30)
 
-                Text("Round  \(timerStateManager.roundNumber)")
-                    .kerning(7)
-                    .font(.title)
-                    .fontWeight(.light)
-                    .foregroundStyle(.white)
+                Spacer(minLength: 50)
+
+                VStack(alignment: .center) {
+                    Text("ROUND")
+
+                    Spacer(minLength: -22)
+
+                    Text("\(timerStateManager.roundNumber)")
+                }
+                .font(.title)
+                .fontWeight(.light)
+                .foregroundStyle(.white)
+                .kerning(16)
+                .frame(maxWidth: .infinity, alignment: .center)
+                .aspectRatio(contentMode: .fit)
+                .padding(.vertical, -30)
             }
-            .offset(y: 25)
-            .frame(maxWidth: .infinity, maxHeight: .infinity)
-            .fixedSize(horizontal: false, vertical: false)
+            .aspectRatio(contentMode: .fit)
         }
+        .frame(maxWidth: .infinity, maxHeight: .infinity)
+        .background(.black)
         .safeAreaPadding()
     }
 }
 
 
 #Preview {
-    ContentView()
+    TimerView()
+        .environmentObject(TimerStateManager())
 }
