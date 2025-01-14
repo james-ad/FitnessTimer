@@ -1,7 +1,7 @@
 # Task List
 
 ## UI-related Tasks
-- [ ] Add some sort of close button to the TimeSelectorView
+- [x] Add some sort of close button to the TimeSelectorView
 - [ ] Increase tap surface area for time selectors in SettingsView
 
 ## Functionality-related Tasks

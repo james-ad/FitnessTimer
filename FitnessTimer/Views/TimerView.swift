@@ -18,32 +18,31 @@ struct TimerView: View, TimeDisplaying {
                 .stroke(.gray, style: StrokeStyle(lineWidth: 10))
                 .zIndex(1)
 
-            VStack(alignment: .center) {
+            VStack(alignment: .center, spacing: 20) {
 
                 Text(timeDisplayed)
-                    .font(.largeTitle)
+                    .font(.system(size: 60))
                     .foregroundStyle(.white)
-                    .kerning(5)
-                    .offset(y: 30)
+                    .multilineTextAlignment(.center)
+                    .tracking(5)
 
-                Spacer(minLength: 50)
 
-                VStack(alignment: .center) {
+                VStack(alignment: .center, spacing: 20) {
                     Text("ROUND")
+                        .multilineTextAlignment(.center)
+                        .tracking(10)
 
-                    Spacer(minLength: -22)
 
                     Text("\(timerStateManager.roundNumber)")
+                        .multilineTextAlignment(.center)
                 }
                 .font(.title)
                 .fontWeight(.light)
                 .foregroundStyle(.white)
-                .kerning(16)
-                .frame(maxWidth: .infinity, alignment: .center)
-                .aspectRatio(contentMode: .fit)
-                .padding(.vertical, -30)
+                .offset(y: 30)
             }
             .aspectRatio(contentMode: .fit)
+            .offset(y: 20)
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
         .background(.black)
