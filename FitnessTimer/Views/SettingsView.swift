@@ -16,7 +16,7 @@ struct SettingsView: View  {
             Spacer()
 
             Text(title)
-                .kerning(3)
+                .tracking(3)
                 .font(.largeTitle)
                 .fontWeight(.light)
                 .foregroundStyle(.white)
@@ -30,9 +30,9 @@ struct SettingsView: View  {
             VStack(alignment: .leading, spacing: 20) {
                 SettingsTimerView(timerType: .roundTimer)
                 SettingsTimerView(timerType: .restTimer)
-                    .padding(-1)
             }
             .safeAreaPadding()
+            .offset(y: 10)
 
             Spacer()
 
@@ -66,23 +66,16 @@ private struct SettingsTimerView: View, TimeDisplaying {
 
     var body: some View {
         HStack(alignment: .center) {
-            Spacer()
             Text("\(title): ")
                 .font(.title)
                 .foregroundStyle(.white)
+                .multilineTextAlignment(.leading)
 
             Text("\(timeDisplayed)")
                 .font(.title)
                 .foregroundStyle(.white)
+                .multilineTextAlignment(.leading)
 
-            // TODO: See if there is a better way to handle this spacing
-            Spacer()
-            Spacer()
-            Spacer()
-            Spacer()
-            Spacer()
-            Spacer()
-            Spacer()
             Spacer()
 
             Button(action: { editModeEnabled.toggle() }) {
