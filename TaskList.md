@@ -6,3 +6,6 @@
 
 ## Functionality-related Tasks
 - [ ] Sync all timers throughout the app and connect to TimerStateManager as single source of truth 
+
+## Other Tasks
+- [ ] Refactor and extract views into their own files

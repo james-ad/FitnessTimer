@@ -20,7 +20,7 @@ class TimerStateManager: ObservableObject {
     @Published var restTime: Int = 0
 
     // TODO: Consider adding this UI, or just for keeping track of # of rounds
-//    @Published var totalRounds: Int = 0
+    @Published var totalRounds: Int = 0
 
     private var cancellable: Cancellable?
 

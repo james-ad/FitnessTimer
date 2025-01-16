@@ -9,13 +9,13 @@ import SwiftUI
 
 struct SettingsView: View  {
     @Environment(\.dismiss) var dismiss
-    private let title = String(localized: "Settings")
+    private let settingsTitle = String(localized: "Settings")
 
     var body: some View {
         VStack {
             Spacer()
 
-            Text(title)
+            Text(settingsTitle)
                 .tracking(3)
                 .font(.largeTitle)
                 .fontWeight(.light)
@@ -30,16 +30,14 @@ struct SettingsView: View  {
             VStack(alignment: .leading, spacing: 20) {
                 SettingsTimerView(timerType: .roundTimer)
                 SettingsTimerView(timerType: .restTimer)
+                SetNumberOfRoundsView()
             }
             .safeAreaPadding()
+            .padding(.vertical, 50)
             .offset(y: 10)
 
-            Spacer()
 
-            Button(action: {
-                print("Button tapped")
-                dismiss()
-            }) {
+            Button(action: { dismiss() }) {
                 Text("Exit Settings")
                     .font(.callout)
                     .padding(12)
@@ -71,6 +69,7 @@ private struct SettingsTimerView: View, TimeDisplaying {
                 .foregroundStyle(.white)
                 .multilineTextAlignment(.leading)
 
+            // timeDisplayed lives in protocol  extension
             Text("\(timeDisplayed)")
                 .font(.title)
                 .foregroundStyle(.white)
@@ -83,6 +82,43 @@ private struct SettingsTimerView: View, TimeDisplaying {
                     .imageScale(.large)
             }
             .sheet(isPresented: $editModeEnabled) {
+                TimeSelectorView()
+            }
+        }
+        .background(.black)
+        .frame(maxWidth: .infinity, alignment: .leading)
+    }
+}
+
+// This struct and the one above are similar, but I'd like to keep the round tracker separate from time trackers
+private struct SetNumberOfRoundsView: View {
+    @EnvironmentObject var timerStateManager: TimerStateManager
+    @State private var editModeEnabled: Bool = false
+    private let title = "Rounds"
+
+    var body: some View {
+        HStack(alignment: .center) {
+            Text("\(title): ")
+                .font(.title)
+                .foregroundStyle(.white)
+                .multilineTextAlignment(.leading)
+
+            // timeDisplayed lives in protocol  extension
+            Text("\(timerStateManager.totalRounds)")
+                .font(.title)
+                .foregroundStyle(.white)
+                .multilineTextAlignment(.leading)
+
+            Spacer()
+
+            Button(action: { editModeEnabled.toggle() }) {
+                Image(systemName: "chevron.forward")
+                    .imageScale(.large)
+            }
+            .sheet(isPresented: $editModeEnabled) {
+
+                // TODO: Replace TimerSelectorView with a round picker
+                
                 TimeSelectorView()
             }
         }
