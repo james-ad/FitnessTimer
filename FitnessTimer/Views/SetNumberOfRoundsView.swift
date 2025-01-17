@@ -8,7 +8,6 @@
 
 import SwiftUI
 
-// This struct and SettingsTimerView are similar, but I'd like to keep the round tracker separate from time trackers
 struct SetNumberOfRoundsView: View {
     @EnvironmentObject var timerStateManager: TimerStateManager
     @State private var editModeEnabled: Bool = false
