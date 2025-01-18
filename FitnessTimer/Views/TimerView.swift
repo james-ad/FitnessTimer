@@ -33,7 +33,7 @@ struct TimerView: View, TimeDisplaying {
                         .tracking(10)
 
 
-                    Text("\(timerStateManager.roundNumber)")
+                    Text("\(timerStateManager.totalRounds)")
                         .multilineTextAlignment(.center)
                 }
                 .font(.title)

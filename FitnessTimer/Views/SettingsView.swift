@@ -30,7 +30,7 @@ struct SettingsView: View  {
             VStack(alignment: .leading, spacing: 20) {
                 SettingsTimerView(timerType: .roundTimer)
                 SettingsTimerView(timerType: .restTimer)
-                SetNumberOfRoundsView()
+                RoundsSelectorView()
             }
             .safeAreaPadding()
             .padding(.vertical, 50)
