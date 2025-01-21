@@ -36,7 +36,7 @@ struct SettingsTimerView: View, TimeDisplaying {
                     .imageScale(.large)
             }
             .sheet(isPresented: $editModeEnabled) {
-                TimeSelectorView()
+                TimeSelectorView(timerType: timerType)
             }
         }
         .background(.black)
@@ -45,6 +45,6 @@ struct SettingsTimerView: View, TimeDisplaying {
 }
 
 #Preview {
-    SettingsView()
+    SettingsTimerView(timerType: .roundTimer)
         .environmentObject(TimerStateManager())
 }

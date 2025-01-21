@@ -11,53 +11,80 @@ struct TimeSelectorView: View {
     @Environment(\.dismiss) var dismiss
     @State var minutesSelected: Int = 0
     @State var secondsSelected: Int = 0
+    private var timerType: TimerType
+    private var title: String {
+        timerType == .roundTimer ? "Round time" : "Rest time"
+    }
+
+    init(timerType: TimerType) {
+        self.timerType = timerType
+    }
 
     var body: some View {
-        VStack {
-            Spacer()
+        ZStack(alignment: .center) {
+            VStack(alignment: .center, spacing: 100) {
+                Spacer()
+                Text(title)
+                    .foregroundStyle(.white)
+                    .font(.title)
 
-            HStack {
+                // MARK: Minutes
                 HStack {
-                    Text("Minutes: ")
-                        .foregroundStyle(.white)
-                    Picker("Minutes", selection: $minutesSelected) {
-                        ForEach(0..<60, id: \.self) { number in
-                            Text("\(number)").tag(number)
-                                .foregroundStyle(.white)
+                    VStack(alignment: .center, spacing: 30) {
+                        Picker("Minutes", selection: $minutesSelected) {
+                            ForEach(1..<60, id: \.self) { number in
+                                Text("\(number)").tag(number)
+                                    .foregroundStyle(.white)
+                                    .font(.title)
+                            }
+                            .background(.black)
                         }
                         .pickerStyle(.wheel)
-                        .background(.black)
-                        .frame(maxWidth: .infinity, maxHeight: 300)
+
+                        Text("Minutes")
+                            .foregroundStyle(.white)
+                            .font(.title2)
+
                     }
-                }
-                
-                HStack {
-                    Text("Seconds: ")
-                        .foregroundStyle(.white)
-                    Picker("Seconds", selection: $secondsSelected) {
-                        ForEach(0..<60, id: \.self) { number in
-                            Text("\(number)").tag(number)
+                    .frame(maxWidth: .infinity, maxHeight: .infinity)
+
+                    // MARK: Seconds
+                    VStack(alignment: .center, spacing: 30) {
+                        Picker("Seconds", selection: $secondsSelected) {
+                            ForEach(1..<60, id: \.self) { number in
+                                Text("\(number)").tag(number)
+                                    .foregroundStyle(.white)
+                                    .font(.title)
+                            }
+                            .background(.black)
                         }
                         .pickerStyle(.wheel)
-                        .frame(maxWidth: .infinity, maxHeight: 300)
+
+                        Text("Seconds")
+                            .foregroundStyle(.white)
+                            .font(.title2)
+
                     }
+                    .frame(maxWidth: .infinity, maxHeight: .infinity)
                 }
-            }
 
-            Spacer()
+            // MARK: Save button
+                Button(action: {
+                    dismiss()
+                }) {
+                    Text("Save")
+                        .font(.callout)
+                        .padding(12)
+                        .foregroundStyle(.black)
+                        .background(.white)
+                        .clipShape(RoundedRectangle(cornerRadius: 8))
+                }
+                .buttonBorderShape(.roundedRectangle)
 
-            Button(action: {
-                print("Button tapped")
-                dismiss()
-            }) {
-                Text("Exit Settings")
-                    .font(.callout)
-                    .padding(12)
-                    .foregroundStyle(.black)
-                    .background(.white)
-                    .clipShape(RoundedRectangle(cornerRadius: 8))
+                Spacer()
             }
-            .buttonBorderShape(.roundedRectangle)
+            .frame(maxWidth: .infinity, maxHeight: .infinity)
+            .offset(y: 20)
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
         .background(.black)
@@ -66,5 +93,5 @@ struct TimeSelectorView: View {
 }
 
 #Preview {
-    TimeSelectorView()
+    TimeSelectorView(timerType: .roundTimer)
 }
