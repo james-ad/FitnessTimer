@@ -35,9 +35,6 @@ struct RoundSelectorView: View {
                         }
                     }
                     .pickerStyle(.wheel)
-//                Text("Rounds")
-//                    .foregroundStyle(.white)
-//                    .font(.title)
                 }
 
                 Button(action: {
