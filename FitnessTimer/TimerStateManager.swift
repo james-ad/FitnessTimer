@@ -46,6 +46,20 @@ class TimerStateManager: ObservableObject {
     func resetTimer() {
         totalSeconds = 0
     }
+
+    func setTime(minutes: Int,
+                 seconds: Int,
+                 forTimerType timerType: TimerType
+    ) {
+        let minutesInSeconds =  minutes * 60
+        let totalSeconds = seconds + minutesInSeconds
+
+        if timerType == .roundTimer {
+            roundTime = totalSeconds
+        } else {
+            restTime = totalSeconds
+        }
+    }
 }
 
 #Preview {

@@ -8,6 +8,7 @@
 import SwiftUI
 
 struct TimeSelectorView: View {
+    @EnvironmentObject private var timerStateManager: TimerStateManager
     @Environment(\.dismiss) var dismiss
     @State var minutesSelected: Int = 0
     @State var secondsSelected: Int = 0
@@ -32,7 +33,7 @@ struct TimeSelectorView: View {
                 HStack {
                     VStack(alignment: .center, spacing: 30) {
                         Picker("Minutes", selection: $minutesSelected) {
-                            ForEach(1..<60, id: \.self) { number in
+                            ForEach(0..<60, id: \.self) { number in
                                 Text("\(number)").tag(number)
                                     .foregroundStyle(.white)
                                     .font(.title)
@@ -51,7 +52,7 @@ struct TimeSelectorView: View {
                     // MARK: Seconds
                     VStack(alignment: .center, spacing: 30) {
                         Picker("Seconds", selection: $secondsSelected) {
-                            ForEach(1..<60, id: \.self) { number in
+                            ForEach(0..<60, id: \.self) { number in
                                 Text("\(number)").tag(number)
                                     .foregroundStyle(.white)
                                     .font(.title)
@@ -68,18 +69,25 @@ struct TimeSelectorView: View {
                     .frame(maxWidth: .infinity, maxHeight: .infinity)
                 }
 
-            // MARK: Save button
-                Button(action: {
-                    dismiss()
-                }) {
-                    Text("Save")
-                        .font(.callout)
-                        .padding(12)
-                        .foregroundStyle(.black)
-                        .background(.white)
-                        .clipShape(RoundedRectangle(cornerRadius: 8))
-                }
-                .buttonBorderShape(.roundedRectangle)
+                // MARK: Save button
+                Button(
+                    action: {
+                        timerStateManager
+                            .setTime(
+                                minutes: minutesSelected,
+                                seconds: secondsSelected,
+                                forTimerType: timerType
+                            )
+                        dismiss()
+                    }) {
+                        Text("Save")
+                            .font(.callout)
+                            .padding(12)
+                            .foregroundStyle(.black)
+                            .background(.white)
+                            .clipShape(RoundedRectangle(cornerRadius: 8))
+                    }
+                    .buttonBorderShape(.roundedRectangle)
 
                 Spacer()
             }
