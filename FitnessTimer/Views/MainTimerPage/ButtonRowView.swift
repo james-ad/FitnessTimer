@@ -98,7 +98,7 @@ struct ButtonRowView: View  {
             .overlay(
                 Circle().stroke(.gray, lineWidth: Constants.lineWidth)
             )
-            .sheet(isPresented: $settingsMenuIsOpen) {
+            .fullScreenCover(isPresented: $settingsMenuIsOpen) {
                 SettingsView()
             }
 

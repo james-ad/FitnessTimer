@@ -35,7 +35,7 @@ struct SettingsTimerView: View, TimeDisplaying {
                 Image(systemName: "chevron.forward")
                     .imageScale(.large)
             }
-            .sheet(isPresented: $editModeEnabled) {
+            .fullScreenCover(isPresented: $editModeEnabled) {
                 TimeSelectorView(timerType: timerType)
             }
         }
