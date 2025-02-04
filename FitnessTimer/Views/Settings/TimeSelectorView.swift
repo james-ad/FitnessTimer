@@ -7,18 +7,27 @@
 
 import SwiftUI
 
+@Observable class TimeSelectorViewModel {
+    var minutesSelected: Int = 0
+    var secondsSelected: Int = 0
+}
+
 struct TimeSelectorView: View {
     @EnvironmentObject private var timerStateManager: TimerStateManager
     @Environment(\.dismiss) var dismiss
-    @State var minutesSelected: Int = 0
-    @State var secondsSelected: Int = 0
-    private var timerType: TimerType
-    private var title: String {
-        timerType == .roundTimer ? "Round time" : "Rest time"
-    }
+
+
+    // TODO: Broken currently. Fix so that view model holds state and populates Picker with said state
+
+
+
+    @Bindable private var viewModel = TimeSelectorViewModel()
+    private let timerType: TimerType
+    private let title: String
 
     init(timerType: TimerType) {
         self.timerType = timerType
+        self.title = timerType == .roundTimer ? "Round time" : "Rest time"
     }
 
     var body: some View {
@@ -32,7 +41,7 @@ struct TimeSelectorView: View {
                 // MARK: Minutes
                 HStack {
                     VStack(alignment: .center, spacing: 30) {
-                        Picker("Minutes", selection: $minutesSelected) {
+                        Picker("Minutes", selection: $viewModel.minutesSelected) {
                             ForEach(0..<60, id: \.self) { number in
                                 Text("\(number)").tag(number)
                                     .foregroundStyle(.white)
@@ -51,7 +60,7 @@ struct TimeSelectorView: View {
 
                     // MARK: Seconds
                     VStack(alignment: .center, spacing: 30) {
-                        Picker("Seconds", selection: $secondsSelected) {
+                        Picker("Seconds", selection: $viewModel.secondsSelected) {
                             ForEach(0..<60, id: \.self) { number in
                                 Text("\(number)").tag(number)
                                     .foregroundStyle(.white)
@@ -74,8 +83,8 @@ struct TimeSelectorView: View {
                     action: {
                         timerStateManager
                             .setTime(
-                                minutes: minutesSelected,
-                                seconds: secondsSelected,
+                                minutes: viewModel.minutesSelected,
+                                seconds: viewModel.secondsSelected,
                                 forTimerType: timerType
                             )
                         dismiss()

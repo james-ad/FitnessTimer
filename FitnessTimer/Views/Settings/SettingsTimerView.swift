@@ -11,6 +11,8 @@ import SwiftUI
 struct SettingsTimerView: View, TimeDisplaying {
     @EnvironmentObject var timerStateManager: TimerStateManager
     @State private var editModeEnabled: Bool = false
+    @State var minutesSelected: Int = 0
+    @State var secondsSelected: Int = 0
     var timerType: TimerType
     private var title: String {
         timerType == .roundTimer ? "Round time" : "Rest time"
