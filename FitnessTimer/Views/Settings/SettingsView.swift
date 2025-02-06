@@ -8,6 +8,7 @@
 import SwiftUI
 
 struct SettingsView: View  {
+    @Environment(TimerStateManager.self) private var timerStateManager
     @Environment(\.dismiss) var dismiss
     private let settingsTitle = String(localized: "Settings")
 
@@ -28,8 +29,11 @@ struct SettingsView: View  {
 
             // MARK: Timer Settings
             VStack(alignment: .leading, spacing: 20) {
-                SettingsTimerView(timerType: .roundTimer)
-                SettingsTimerView(timerType: .restTimer)
+                SettingsTimerView(
+                    timerStateManager: timerStateManager,
+                    timerType: .roundTimer
+                )
+                SettingsTimerView(timerStateManager: timerStateManager, timerType: .restTimer)
                 RoundsSelectorButtonView()
             }
             .safeAreaPadding()
@@ -57,5 +61,4 @@ struct SettingsView: View  {
 
 #Preview {
     SettingsView()
-        .environmentObject(TimerStateManager())
 }

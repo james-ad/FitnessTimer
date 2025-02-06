@@ -8,15 +8,13 @@
 import SwiftUI
 
 struct RoundSelectorView: View {
-    @EnvironmentObject var timerStateManager: TimerStateManager
+    @Bindable private var timerStateManager: TimerStateManager
     @Binding private var editModeEnabled: Bool
 
-    public init(timerStateManager: EnvironmentObject<TimerStateManager>, editModeEnabled: Binding<Bool>) {
-        self._timerStateManager = timerStateManager
+    public init(timerStateManager: TimerStateManager, editModeEnabled: Binding<Bool>) {
+        self.timerStateManager = timerStateManager
         self._editModeEnabled = editModeEnabled
     }
-
-    // TODO: CLEANUP ROUND PICKER CODE BELOW
 
     var body: some View {
         ZStack {
@@ -62,6 +60,7 @@ struct RoundSelectorView: View {
 
 #Preview {
     @Previewable @State var mockIsEnabled = false
-    RoundSelectorView(timerStateManager: EnvironmentObject<TimerStateManager>(), editModeEnabled: $mockIsEnabled)
-        .environmentObject(TimerStateManager())
+    @Previewable var timerStateManager = TimerStateManager()
+    RoundSelectorView(timerStateManager: timerStateManager, editModeEnabled: $mockIsEnabled)
+        .environment(timerStateManager)
 }

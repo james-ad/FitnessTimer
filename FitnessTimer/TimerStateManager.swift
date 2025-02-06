@@ -8,21 +8,23 @@
 import Combine
 import SwiftUI
 
-class TimerStateManager: ObservableObject {
-    @Published var totalSeconds: Int = 0
-    @Published var buttonTitle: String = "START"
-    @Published var isRunning: Bool = false
+@Observable class TimerStateManager {
+    var buttonTitle = String(localized: "START")
+    var isFinished: Bool = false
     // Might need pause status later to distinguish between pause and stop
-    @Published var isPaused: Bool = false
-    @Published var isFinished: Bool = false
-    @Published var roundNumber: Int = 0
-    @Published var roundTime: Int = 0
-    @Published var restTime: Int = 0
+    var isPaused: Bool = false
+    var isRunning: Bool = false
 
-    // TODO: Consider adding this UI, or just for keeping track of # of rounds
-    @Published var totalRounds: Int = 0
+    var roundNumber: Int = 0
+    var roundTime: Int = 0
+    var restTime: Int = 0
+    var totalRounds: Int = 0
+    var totalSeconds: Int = 0
 
-    private var cancellable: Cancellable?
+    var roundPickerTime = (seconds: 0, minutes: 0)
+    var restPickerTime = (seconds: 0, minutes: 0)
+
+    @ObservationIgnored private var cancellable: Cancellable?
 
     func startTimer() {
         cancellable = Timer

@@ -9,7 +9,9 @@ import Combine
 import SwiftUI
 
 struct ButtonRowView: View  {
-    @EnvironmentObject private var timerStateManager: TimerStateManager
+    @Environment(
+        TimerStateManager
+            .self) private var timerStateManager
 
     // MARK: Main button group view
     var body: some View {
@@ -31,7 +33,7 @@ struct ButtonRowView: View  {
 
     // MARK: Restart Button
     struct RestartButon: View {
-        @EnvironmentObject private var timerStateManager: TimerStateManager
+        @Environment(TimerStateManager.self) private var timerStateManager
 
         var body: some View {
             Button(action: restartTimer) {
@@ -56,7 +58,7 @@ struct ButtonRowView: View  {
 
     // MARK: Start/Stop button
     struct StartStopButton: View {
-        @EnvironmentObject private var timerStateManager: TimerStateManager
+        @Environment(TimerStateManager.self) private var timerStateManager
 
         var body: some View {
             Button(action: startOrStopTimer) {

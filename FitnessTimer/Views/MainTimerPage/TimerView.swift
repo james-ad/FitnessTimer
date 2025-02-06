@@ -9,7 +9,7 @@ import Combine
 import SwiftUI
 
 struct TimerView: View, TimeDisplaying {
-    @EnvironmentObject var timerStateManager: TimerStateManager
+    @Environment(TimerStateManager.self) var timerStateManager
     var timerType: TimerType = .currentTimer
 
     var body: some View {
@@ -53,5 +53,5 @@ struct TimerView: View, TimeDisplaying {
 
 #Preview {
     TimerView()
-        .environmentObject(TimerStateManager())
+        .environment(TimerStateManager())
 }

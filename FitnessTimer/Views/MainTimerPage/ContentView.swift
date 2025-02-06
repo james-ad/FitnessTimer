@@ -8,17 +8,17 @@
 import SwiftUI
 
 struct ContentView: View {
-    @StateObject var timerStateManager = TimerStateManager()
+    @State var timerStateManager = TimerStateManager()
 
     var body: some View {
         VStack {
             Spacer()
             TimerView()
-                .environmentObject(timerStateManager)
+                .environment(timerStateManager)
             Spacer()
             Spacer()
             ButtonRowView()
-                .environmentObject(timerStateManager)
+                .environment(timerStateManager)
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
         .background(.black)

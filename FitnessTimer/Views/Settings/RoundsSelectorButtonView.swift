@@ -9,7 +9,7 @@
 import SwiftUI
 
 struct RoundsSelectorButtonView: View {
-    @EnvironmentObject var timerStateManager: TimerStateManager
+    @Environment(TimerStateManager.self) var timerStateManager
     @State private var editModeEnabled: Bool = false
     private let title = "Rounds"
 
@@ -34,7 +34,7 @@ struct RoundsSelectorButtonView: View {
             }
             .fullScreenCover(isPresented: $editModeEnabled) {
                 RoundSelectorView(
-                    timerStateManager: _timerStateManager,
+                    timerStateManager: timerStateManager,
                     editModeEnabled: $editModeEnabled
                 )
             }
@@ -46,5 +46,5 @@ struct RoundsSelectorButtonView: View {
 
 #Preview {
     SettingsView()
-        .environmentObject(TimerStateManager())
+        .environment(TimerStateManager())
 }

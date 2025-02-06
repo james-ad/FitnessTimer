@@ -7,27 +7,17 @@
 
 import SwiftUI
 
-@Observable class TimeSelectorViewModel {
-    var minutesSelected: Int = 0
-    var secondsSelected: Int = 0
-}
-
 struct TimeSelectorView: View {
-    @EnvironmentObject private var timerStateManager: TimerStateManager
+    @Environment(TimerStateManager.self) private var timerStateManager
     @Environment(\.dismiss) var dismiss
-
-
-    // TODO: Broken currently. Fix so that view model holds state and populates Picker with said state
-
-
-
-    @Bindable private var viewModel = TimeSelectorViewModel()
+    @Binding var storedTime: (seconds: Int, minutes: Int)
     private let timerType: TimerType
     private let title: String
 
-    init(timerType: TimerType) {
+    init(timerType: TimerType, storedTime: Binding<(seconds: Int, minutes: Int)>) {
         self.timerType = timerType
         self.title = timerType == .roundTimer ? "Round time" : "Rest time"
+        self._storedTime = storedTime
     }
 
     var body: some View {
@@ -41,7 +31,7 @@ struct TimeSelectorView: View {
                 // MARK: Minutes
                 HStack {
                     VStack(alignment: .center, spacing: 30) {
-                        Picker("Minutes", selection: $viewModel.minutesSelected) {
+                        Picker("Minutes", selection: $storedTime.minutes) {
                             ForEach(0..<60, id: \.self) { number in
                                 Text("\(number)").tag(number)
                                     .foregroundStyle(.white)
@@ -60,7 +50,7 @@ struct TimeSelectorView: View {
 
                     // MARK: Seconds
                     VStack(alignment: .center, spacing: 30) {
-                        Picker("Seconds", selection: $viewModel.secondsSelected) {
+                        Picker("Seconds", selection: $storedTime.seconds) {
                             ForEach(0..<60, id: \.self) { number in
                                 Text("\(number)").tag(number)
                                     .foregroundStyle(.white)
@@ -83,8 +73,8 @@ struct TimeSelectorView: View {
                     action: {
                         timerStateManager
                             .setTime(
-                                minutes: viewModel.minutesSelected,
-                                seconds: viewModel.secondsSelected,
+                                minutes: storedTime.minutes,
+                                seconds: storedTime.seconds,
                                 forTimerType: timerType
                             )
                         dismiss()
@@ -110,5 +100,10 @@ struct TimeSelectorView: View {
 }
 
 #Preview {
-    TimeSelectorView(timerType: .roundTimer)
+    @Previewable @State var timerStateManager = TimerStateManager()
+    TimeSelectorView(
+        timerType: .roundTimer,
+        storedTime: $timerStateManager.roundPickerTime
+    )
+    .environment(timerStateManager)
 }

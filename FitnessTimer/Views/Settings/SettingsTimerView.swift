@@ -9,7 +9,7 @@
 import SwiftUI
 
 struct SettingsTimerView: View, TimeDisplaying {
-    @EnvironmentObject var timerStateManager: TimerStateManager
+    @Bindable var timerStateManager: TimerStateManager
     @State private var editModeEnabled: Bool = false
     @State var minutesSelected: Int = 0
     @State var secondsSelected: Int = 0
@@ -38,7 +38,9 @@ struct SettingsTimerView: View, TimeDisplaying {
                     .imageScale(.large)
             }
             .fullScreenCover(isPresented: $editModeEnabled) {
-                TimeSelectorView(timerType: timerType)
+                TimeSelectorView(
+                    timerType: timerType,
+                    storedTime: timerType == .roundTimer ? $timerStateManager.roundPickerTime : $timerStateManager.restPickerTime)
             }
         }
         .background(.black)
@@ -47,6 +49,9 @@ struct SettingsTimerView: View, TimeDisplaying {
 }
 
 #Preview {
-    SettingsTimerView(timerType: .roundTimer)
-        .environmentObject(TimerStateManager())
+    SettingsTimerView(
+        timerStateManager: TimerStateManager(),
+        timerType: .roundTimer
+    )
+        .environment(TimerStateManager())
 }
