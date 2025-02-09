@@ -21,6 +21,7 @@ struct TimerView: View, TimeDisplaying {
             VStack(alignment: .center, spacing: 20) {
 
                 Text(timeDisplayed)
+                    .frame(maxWidth: .infinity)
                     .font(.system(size: 60))
                     .foregroundStyle(.white)
                     .multilineTextAlignment(.center)
@@ -29,11 +30,13 @@ struct TimerView: View, TimeDisplaying {
 
                 VStack(alignment: .center, spacing: 20) {
                     Text("ROUND")
+                        .frame(maxWidth: .infinity)
                         .multilineTextAlignment(.center)
                         .tracking(12)
 
 
                     Text("\(timerStateManager.totalRounds)")
+                        .frame(maxWidth: .infinity)
                         .multilineTextAlignment(.center)
                 }
                 .font(.title)
@@ -52,6 +55,5 @@ struct TimerView: View, TimeDisplaying {
 
 
 #Preview {
-    TimerView()
-        .environment(TimerStateManager())
+    ContentView()
 }

@@ -25,7 +25,7 @@ struct ButtonRowView: View  {
             SettingsButton()
         }
         .frame(maxWidth: .infinity)
-        .padding(.bottom, 20)
+        .padding(.bottom, 50)
         .safeAreaPadding()
     }
 
@@ -91,16 +91,17 @@ struct ButtonRowView: View  {
         var body: some View {
             Button(action: goToSettings) {
                 Image(systemName: "gearshape")
-                    .font(.title)
-                    .padding(5)
+                    .font(.system(size: 24))
+                    .padding(12)
+                    .background(Color.black)
+                    .clipShape(Circle())
+                    .overlay(
+                        Circle().stroke(.gray, lineWidth: Constants.lineWidth)
+                    )
             }
+            .foregroundStyle(.white)
             .buttonBorderShape(.circle)
             .buttonStyle(.bordered)
-            .foregroundStyle(.white)
-            .clipShape(Circle())
-            .overlay(
-                Circle().stroke(.gray, lineWidth: Constants.lineWidth)
-            )
             .fullScreenCover(isPresented: $settingsMenuIsOpen) {
                 SettingsView()
             }
