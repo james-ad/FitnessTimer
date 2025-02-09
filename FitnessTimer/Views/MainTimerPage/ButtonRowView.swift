@@ -24,6 +24,7 @@ struct ButtonRowView: View  {
 
             SettingsButton()
         }
+        .frame(maxWidth: .infinity)
         .padding(.bottom, 20)
         .safeAreaPadding()
     }

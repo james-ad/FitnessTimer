@@ -30,7 +30,7 @@ struct TimerView: View, TimeDisplaying {
                 VStack(alignment: .center, spacing: 20) {
                     Text("ROUND")
                         .multilineTextAlignment(.center)
-                        .tracking(10)
+                        .tracking(12)
 
 
                     Text("\(timerStateManager.totalRounds)")

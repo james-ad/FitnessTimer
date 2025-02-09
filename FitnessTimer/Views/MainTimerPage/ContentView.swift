@@ -11,13 +11,15 @@ struct ContentView: View {
     @State var timerStateManager = TimerStateManager()
 
     var body: some View {
-        VStack {
+        VStack(alignment: .center) {
             Spacer()
             TimerView()
+                .frame(maxWidth: .infinity)
                 .environment(timerStateManager)
             Spacer()
             Spacer()
             ButtonRowView()
+                .frame(maxWidth: .infinity)
                 .environment(timerStateManager)
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
