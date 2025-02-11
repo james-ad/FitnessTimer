@@ -14,6 +14,7 @@ import SwiftUI
     // Might need pause status later to distinguish between pause and stop
     var isPaused: Bool = false
     var isRunning: Bool = false
+    var roundIsOver: Bool = true
 
     var roundNumber: Int = 0
     var roundTime: Int = 0
@@ -26,12 +27,41 @@ import SwiftUI
 
     @ObservationIgnored private var cancellable: Cancellable?
 
+    private func switchTimer(to timerType: TimerType) {
+        totalSeconds = timerType == .roundTimer ? roundTime : restTime
+        if timerType == .restTimer {
+            roundTime = roundPickerTime.seconds + (roundPickerTime.minutes * 60)
+        } else if timerType == .roundTimer {
+            restTime = restPickerTime.seconds + (restPickerTime.minutes * 60)
+        }
+    }
+
     func startTimer() {
         cancellable = Timer
             .publish(every: 1, on: .main, in: .common)
             .autoconnect()
+            .prefix(while: { [weak self] _ in
+                guard let self else { return false }
+                return totalRounds > 0
+            })
             .sink { [weak self] _ in
-                self?.totalSeconds += 1
+                guard let self else { return }
+
+                guard self.totalSeconds > 0 else {
+                    self.stopTimer()
+                    return
+                }
+
+                self.totalSeconds -= 1
+
+                if roundTime == 0 {
+                    switchTimer(to: .restTimer)
+                }
+
+                if restTime == 0 {
+                    switchTimer(to: .roundTimer)
+                    totalRounds -= 1
+                }
             }
 
         isRunning = true
@@ -54,12 +84,14 @@ import SwiftUI
                  forTimerType timerType: TimerType
     ) {
         let minutesInSeconds =  minutes * 60
-        let totalSeconds = seconds + minutesInSeconds
+        let timeInSeconds = seconds + minutesInSeconds
 
         if timerType == .roundTimer {
-            roundTime = totalSeconds
+            roundTime = timeInSeconds
+            totalSeconds = roundTime
+
         } else {
-            restTime = totalSeconds
+            restTime = timeInSeconds
         }
     }
 }
