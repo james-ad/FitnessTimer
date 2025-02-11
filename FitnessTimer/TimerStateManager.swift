@@ -9,30 +9,74 @@ import Combine
 import SwiftUI
 
 @Observable class TimerStateManager {
+    // MARK: Private properties
+    @ObservationIgnored private var cancellable: Cancellable?
+    private var timerType: TimerType = .mainTimer
+    private var roundFinished: Bool = false
+    private var restFinished: Bool = false
+
+    // MARK: Timer labels
+
+
+    // TODO: UPDATE BUTTON TITLE PROPERTY SO IT'S DYNAMIC BASED OFF OF TIMER STATUS
+
+
     var buttonTitle = String(localized: "START")
+    var roundTitle: String {
+        switch self.timerType {
+            case .mainTimer:
+                String(localized: "ROUNDS")
+            case .roundTimer:
+                String(localized: "ROUND")
+            case .restTimer:
+                String(localized: "REST")
+        }
+    }
+
+    // MARK: Timer statuses
     var isFinished: Bool = false
     // Might need pause status later to distinguish between pause and stop
     var isPaused: Bool = false
     var isRunning: Bool = false
     var roundIsOver: Bool = true
 
-    var roundNumber: Int = 0
-    var roundTime: Int = 0
-    var restTime: Int = 0
-    var totalRounds: Int = 0
-    var totalSeconds: Int = 0
-
-    var roundPickerTime = (seconds: 0, minutes: 0)
+    // MARK: Time settings
     var restPickerTime = (seconds: 0, minutes: 0)
+    var roundPickerTime = (seconds: 0, minutes: 0)
+    var currentRound: Int = 0
+    var restTime: Int = 0
+    var roundTime: Int = 0
+    var totalSeconds: Int = 0
+    var totalRounds: Int = 0 {
+        didSet(newValue) {
+            currentRound = totalRounds
+        }
+    }
 
-    @ObservationIgnored private var cancellable: Cancellable?
+    // MARK: Timer functionality
+    func switchTimer() {
+        if [.mainTimer, .roundTimer].contains(self.timerType) {
+            totalSeconds = restTime
+            self.timerType = .restTimer
+            roundFinished = true
+        } else {
+            totalSeconds = roundTime
+            self.timerType = .roundTimer
+            restFinished = true
+        }
 
-    private func switchTimer(to timerType: TimerType) {
-        totalSeconds = timerType == .roundTimer ? roundTime : restTime
-        if timerType == .restTimer {
-            roundTime = roundPickerTime.seconds + (roundPickerTime.minutes * 60)
-        } else if timerType == .roundTimer {
-            restTime = restPickerTime.seconds + (restPickerTime.minutes * 60)
+        if roundFinished && restFinished {
+            currentRound -= 1
+            roundFinished.toggle()
+            restFinished.toggle()
+
+            if currentRound == 0 {
+                stopTimer()
+                resetTimer()
+                timerType = .mainTimer
+                totalSeconds = roundTime
+                currentRound = totalRounds
+            }
         }
     }
 
@@ -42,25 +86,14 @@ import SwiftUI
             .autoconnect()
             .prefix(while: { [weak self] _ in
                 guard let self else { return false }
-                return totalRounds > 0
+                return currentRound > 0
             })
             .sink { [weak self] _ in
                 guard let self else { return }
-
-                guard self.totalSeconds > 0 else {
-                    self.stopTimer()
-                    return
-                }
-
                 self.totalSeconds -= 1
 
-                if roundTime == 0 {
-                    switchTimer(to: .restTimer)
-                }
-
-                if restTime == 0 {
-                    switchTimer(to: .roundTimer)
-                    totalRounds -= 1
+                if self.totalSeconds < 0 {
+                    switchTimer()
                 }
             }
 
@@ -76,7 +109,8 @@ import SwiftUI
     }
 
     func resetTimer() {
-        totalSeconds = 0
+        totalSeconds = roundTime
+        currentRound = totalRounds
     }
 
     func setTime(minutes: Int,
@@ -89,7 +123,6 @@ import SwiftUI
         if timerType == .roundTimer {
             roundTime = timeInSeconds
             totalSeconds = roundTime
-
         } else {
             restTime = timeInSeconds
         }

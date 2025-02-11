@@ -10,7 +10,7 @@ import SwiftUI
 
 struct TimerView: View, TimeDisplaying {
     @Environment(TimerStateManager.self) var timerStateManager
-    var timerType: TimerType = .currentTimer
+    var timerType: TimerType = .mainTimer
 
     var body: some View {
         ZStack {
@@ -29,13 +29,13 @@ struct TimerView: View, TimeDisplaying {
 
 
                 VStack(alignment: .center, spacing: 20) {
-                    Text("ROUND")
+                    Text(timerStateManager.roundTitle)
                         .frame(maxWidth: .infinity)
                         .multilineTextAlignment(.center)
                         .tracking(12)
 
 
-                    Text("\(timerStateManager.totalRounds)")
+                    Text("\(timerStateManager.currentRound)")
                         .frame(maxWidth: .infinity)
                         .multilineTextAlignment(.center)
                 }

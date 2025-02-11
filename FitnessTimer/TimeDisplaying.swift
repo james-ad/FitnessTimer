@@ -19,7 +19,7 @@ extension TimeDisplaying {
     var hourPlusFormat: String { "%i:%02d:%02d" }
     var timeKeeper: Int {
         switch timerType {
-            case .currentTimer:
+            case .mainTimer:
                 timerStateManager.totalSeconds
             case .roundTimer:
                 timerStateManager.roundTime
@@ -41,7 +41,7 @@ extension TimeDisplaying {
 }
 
 enum TimerType {
-    case currentTimer
+    case mainTimer
     case roundTimer
     case restTimer
 }
