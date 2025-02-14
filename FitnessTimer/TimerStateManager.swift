@@ -16,7 +16,6 @@ import SwiftUI
     private var restFinished: Bool = false
 
     // MARK: Timer labels
-
     var buttonTitle = String(localized: "START")
     var roundTitle: String {
         switch self.timerType {
