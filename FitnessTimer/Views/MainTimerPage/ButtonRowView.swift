@@ -8,18 +8,18 @@
 import Combine
 import SwiftUI
 
-struct ButtonRowView: View  {
-    @Environment(
-        TimerStateManager
-            .self) private var timerStateManager
+// MARK: Main page button-group view
 
-    // MARK: Main button group view
+struct ButtonRowView: View  {
+    @Environment(TimerStateManager.self) private var timerStateManager
+    
     var body: some View {
         HStack {
-            RestartButon()
+            RestartButon(restartTimer: timerStateManager.resetTimer)
             Spacer()
 
-            StartStopButton()
+            PlayPauseButton(buttonTitle: timerStateManager.buttonTitle,
+                            toggleTimer: timerStateManager.toggleTimer)
             Spacer()
 
             SettingsButton()
@@ -30,12 +30,16 @@ struct ButtonRowView: View  {
     }
 
 
-    // Button Views
+    // MARK: BUTTON VIEWS
 
     // MARK: Restart Button
     struct RestartButon: View {
-        @Environment(TimerStateManager.self) private var timerStateManager
-
+        private let restartTimer: () -> Void
+        
+        init(restartTimer: @escaping () -> Void) {
+            self.restartTimer = restartTimer
+        }
+        
         var body: some View {
             Button(action: restartTimer) {
                 Image(systemName: "arrow.uturn.backward")
@@ -52,18 +56,21 @@ struct ButtonRowView: View  {
             .buttonStyle(.bordered)
         }
 
-        private func restartTimer() {
-            timerStateManager.resetTimer()
-        }
     }
 
-    // MARK: Start/Stop button
-    struct StartStopButton: View {
-        @Environment(TimerStateManager.self) private var timerStateManager
-
+    // MARK: Play/Pause button
+    struct PlayPauseButton: View {
+        private let buttonTitle: String
+        private let toggleTimer: () -> Void
+        
+        init(buttonTitle: String, toggleTimer: @escaping () -> Void) {
+            self.buttonTitle = buttonTitle
+            self.toggleTimer = toggleTimer
+        }
+        
         var body: some View {
-            Button(action: startOrStopTimer) {
-                Text(timerStateManager.buttonTitle)
+            Button(action: toggleTimer) {
+                Text(buttonTitle)
                     .font(.callout)
                     .foregroundStyle(.white)
                     .padding(.vertical, 20)
@@ -73,14 +80,6 @@ struct ButtonRowView: View  {
             }
             .buttonBorderShape(.capsule)
             .offset(y: -20)
-        }
-
-        private func startOrStopTimer() {
-            if timerStateManager.isRunning {
-                timerStateManager.stopTimer()
-            } else {
-                timerStateManager.startTimer()
-            }
         }
     }
 

@@ -17,10 +17,6 @@ import SwiftUI
 
     // MARK: Timer labels
 
-
-    // TODO: UPDATE BUTTON TITLE PROPERTY SO IT'S DYNAMIC BASED OFF OF TIMER STATUS
-
-
     var buttonTitle = String(localized: "START")
     var roundTitle: String {
         switch self.timerType {
@@ -35,12 +31,15 @@ import SwiftUI
 
     // MARK: Timer statuses
     var isFinished: Bool = false
+    
     // Might need pause status later to distinguish between pause and stop
     var isPaused: Bool = false
     var isRunning: Bool = false
     var roundIsOver: Bool = true
 
     // MARK: Time settings
+    var timerIsRunning: Bool = false
+    var roundNumber: Int = 0
     var restPickerTime = (seconds: 0, minutes: 0)
     var roundPickerTime = (seconds: 0, minutes: 0)
     var currentRound: Int = 0
@@ -80,6 +79,14 @@ import SwiftUI
         }
     }
 
+    func toggleTimer() {
+        if timerIsRunning {
+            stopTimer()
+        } else {
+            startTimer()
+        }
+    }
+    
     func startTimer() {
         cancellable = Timer
             .publish(every: 1, on: .main, in: .common)
@@ -97,14 +104,14 @@ import SwiftUI
                 }
             }
 
-        isRunning = true
+        timerIsRunning = true
         buttonTitle = String(localized: "PAUSE")
     }
 
     func stopTimer() {
         cancellable?.cancel()
         cancellable = nil
-        isRunning = false
+        timerIsRunning = false
         buttonTitle = String(localized: "START")
     }
 
@@ -130,5 +137,5 @@ import SwiftUI
 }
 
 #Preview {
-    ContentView()
-}
+        ContentView()
+    }
