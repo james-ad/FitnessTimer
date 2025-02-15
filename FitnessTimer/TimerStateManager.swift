@@ -8,6 +8,8 @@
 import Combine
 import SwiftUI
 
+typealias BindableStateManager = Bindable<TimerStateManager>
+
 @Observable class TimerStateManager {
     // MARK: Private properties
     @ObservationIgnored private var cancellable: Cancellable?
@@ -119,18 +121,17 @@ import SwiftUI
         currentRound = totalRounds
     }
 
-    func setTime(minutes: Int,
-                 seconds: Int,
-                 forTimerType timerType: TimerType
-    ) {
-        let minutesInSeconds =  minutes * 60
-        let timeInSeconds = seconds + minutesInSeconds
+    func setTime(forTimerType timerType: TimerType) {
+        let pickerTime = timerType == .roundTimer ? roundPickerTime : restPickerTime
+        let minutesInSeconds =  pickerTime.minutes * 60
+        let timeInSeconds = pickerTime.seconds + minutesInSeconds
 
         if timerType == .roundTimer {
             roundTime = timeInSeconds
             totalSeconds = roundTime
         } else {
             restTime = timeInSeconds
+           // TODO: Make sure this is the correct logic and that totalSeconds doesn't need to be set here as well
         }
     }
 }

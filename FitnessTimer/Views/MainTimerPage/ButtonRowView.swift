@@ -9,12 +9,11 @@ import Combine
 import SwiftUI
 
 // MARK: Main page button-group view
-
 struct ButtonRowView: View  {
     @Bindable private var timerStateManager: TimerStateManager
 
-    init(timerStateManager: TimerStateManager) {
-        self.timerStateManager = timerStateManager
+    init(timerStateManager: BindableStateManager) {
+        self._timerStateManager = timerStateManager
     }
 
     var body: some View {
@@ -26,13 +25,12 @@ struct ButtonRowView: View  {
                             toggleTimer: timerStateManager.toggleTimer)
             Spacer()
 
-            SettingsButton(timerStateManager: timerStateManager)
+            SettingsButton(timerStateManager: _timerStateManager)
         }
         .frame(maxWidth: .infinity)
         .padding(.bottom, 50)
         .safeAreaPadding()
     }
-
 
     // MARK: BUTTON VIEWS
 
@@ -92,8 +90,8 @@ struct ButtonRowView: View  {
         @Bindable private var timerStateManager: TimerStateManager
         @State var settingsMenuIsOpen: Bool = false
 
-        init(timerStateManager: TimerStateManager) {
-            self.timerStateManager = timerStateManager
+        init(timerStateManager: BindableStateManager) {
+            self._timerStateManager = timerStateManager
         }
 
         var body: some View {

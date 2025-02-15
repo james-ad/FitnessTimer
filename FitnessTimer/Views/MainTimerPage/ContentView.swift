@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct ContentView: View {
-    @State var timerStateManager = TimerStateManager()
+    @Bindable var timerStateManager = TimerStateManager()
 
     var body: some View {
         VStack(alignment: .center) {
@@ -18,7 +18,7 @@ struct ContentView: View {
                 .environment(timerStateManager)
             Spacer()
             Spacer()
-            ButtonRowView(timerStateManager: timerStateManager)
+            ButtonRowView(timerStateManager: _timerStateManager)
                 .frame(maxWidth: .infinity)
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)

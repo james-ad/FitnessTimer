@@ -10,6 +10,7 @@ import SwiftUI
 struct TimeSelectorView: View {
     @Environment(\.dismiss) var dismiss
     @Binding var storedTime: (seconds: Int, minutes: Int)
+    private let setTime: (TimerType) -> Void
     private let timerType: TimerType
     private let title: String
 //    private let setTime:  (Int, Int, TimerType) -> Void
@@ -18,10 +19,14 @@ struct TimeSelectorView: View {
 
 
 
-    init(timerType: TimerType, storedTime: Binding<(seconds: Int, minutes: Int)>) {
+    init(timerType: TimerType,
+         storedTime: Binding<(seconds: Int, minutes: Int)>,
+         setTime: @escaping (TimerType) -> Void
+    ) {
         self.timerType = timerType
         self.title = timerType == .roundTimer ? "Round time" : "Rest time"
         self._storedTime = storedTime
+        self.setTime = setTime
     }
 
     var body: some View {
@@ -75,12 +80,7 @@ struct TimeSelectorView: View {
                 // MARK: Save button
                 Button(
                     action: {
-                        timerStateManager
-                            .setTime(
-                                minutes: storedTime.minutes,
-                                seconds: storedTime.seconds,
-                                forTimerType: timerType
-                            )
+                        setTime(timerType)
                         dismiss()
                     }) {
                         Text("Save")
@@ -107,7 +107,8 @@ struct TimeSelectorView: View {
     @Previewable @State var timerStateManager = TimerStateManager()
     TimeSelectorView(
         timerType: .roundTimer,
-        storedTime: $timerStateManager.roundPickerTime
+        storedTime: $timerStateManager.roundPickerTime,
+        setTime: timerStateManager.setTime(forTimerType:)
     )
     .environment(timerStateManager)
 }

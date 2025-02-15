@@ -7,8 +7,15 @@
 
 import SwiftUI
 
+enum SettingsOptions: String, CaseIterable, Identifiable {
+    case timerSettings, appSettings
+
+    var id: Self { self }
+}
+
 struct SettingsView: View  {
     @Bindable private var timerStateManager: TimerStateManager
+    @State private var settingsOption: SettingsOptions = .timerSettings
     @Environment(\.dismiss) var dismiss
     private let settingsTitle = String(localized: "Settings")
 
@@ -28,10 +35,21 @@ struct SettingsView: View  {
                 .frame(maxWidth: .infinity, alignment: .center)
                 .safeAreaPadding()
 
+            // TODO: Fix UI for settings option picker (especially edges)
+
+//            Picker("Settings Option", selection: $settingsOption) {
+//                Text("Timer Settings").tag(SettingsOptions.timerSettings)
+//                Text("App Settings").tag(SettingsOptions.appSettings)
+//            }
+//            .luminanceToAlpha()
+//            .background(.gray)
+//            .pickerStyle(.segmented)
+
             Spacer()
             Spacer()
 
             // MARK: Timer Settings
+            if settingsOption == .timerSettings {
             VStack(alignment: .leading, spacing: 20) {
                 SettingsTimerView(timerStateManager: timerStateManager,
                                   timerType: .roundTimer)
@@ -44,6 +62,11 @@ struct SettingsView: View  {
             .safeAreaPadding()
             .padding(.vertical, 50)
             .offset(y: 10)
+            } else {
+                // TODO: App Settings can go here
+
+                Text("App Settings")
+            }
 
 
             Button(action: { dismiss() }) {
