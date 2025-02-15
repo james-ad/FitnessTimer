@@ -9,9 +9,13 @@
 import SwiftUI
 
 struct RoundsSelectorButtonView: View {
-    @Environment(TimerStateManager.self) var timerStateManager
+    @Binding private var totalRounds: Int
     @State private var editModeEnabled: Bool = false
     private let title = "Rounds"
+
+    init(totalRounds: Binding<Int>) {
+        self._totalRounds = totalRounds
+    }
 
     var body: some View {
         HStack(alignment: .center) {
@@ -21,7 +25,7 @@ struct RoundsSelectorButtonView: View {
                 .multilineTextAlignment(.leading)
 
             // timeDisplayed lives in protocol  extension
-            Text("\(timerStateManager.totalRounds)")
+            Text("\(totalRounds)")
                 .font(.title)
                 .foregroundStyle(.white)
                 .multilineTextAlignment(.leading)
@@ -33,9 +37,8 @@ struct RoundsSelectorButtonView: View {
                     .imageScale(.large)
             }
             .fullScreenCover(isPresented: $editModeEnabled) {
-                RoundSelectorView(
-                    timerStateManager: timerStateManager,
-                    editModeEnabled: $editModeEnabled
+                RoundSelectorView(totalRounds: $totalRounds,
+                                  editModeEnabled: $editModeEnabled
                 )
             }
         }
@@ -45,6 +48,5 @@ struct RoundsSelectorButtonView: View {
 }
 
 #Preview {
-    SettingsView()
-        .environment(TimerStateManager())
+    SettingsView(timerStateManager: TimerStateManager())
 }

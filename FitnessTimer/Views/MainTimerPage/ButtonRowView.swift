@@ -11,8 +11,12 @@ import SwiftUI
 // MARK: Main page button-group view
 
 struct ButtonRowView: View  {
-    @Environment(TimerStateManager.self) private var timerStateManager
-    
+    @Bindable private var timerStateManager: TimerStateManager
+
+    init(timerStateManager: TimerStateManager) {
+        self.timerStateManager = timerStateManager
+    }
+
     var body: some View {
         HStack {
             RestartButon(restartTimer: timerStateManager.resetTimer)
@@ -22,7 +26,7 @@ struct ButtonRowView: View  {
                             toggleTimer: timerStateManager.toggleTimer)
             Spacer()
 
-            SettingsButton()
+            SettingsButton(timerStateManager: timerStateManager)
         }
         .frame(maxWidth: .infinity)
         .padding(.bottom, 50)
@@ -85,7 +89,12 @@ struct ButtonRowView: View  {
 
     // MARK: Settings button
     struct SettingsButton: View {
+        @Bindable private var timerStateManager: TimerStateManager
         @State var settingsMenuIsOpen: Bool = false
+
+        init(timerStateManager: TimerStateManager) {
+            self.timerStateManager = timerStateManager
+        }
 
         var body: some View {
             Button(action: goToSettings) {
@@ -102,7 +111,7 @@ struct ButtonRowView: View  {
             .buttonBorderShape(.circle)
             .buttonStyle(.bordered)
             .fullScreenCover(isPresented: $settingsMenuIsOpen) {
-                SettingsView()
+                SettingsView(timerStateManager: timerStateManager)
             }
 
         }

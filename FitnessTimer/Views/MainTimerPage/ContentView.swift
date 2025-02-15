@@ -18,9 +18,8 @@ struct ContentView: View {
                 .environment(timerStateManager)
             Spacer()
             Spacer()
-            ButtonRowView()
+            ButtonRowView(timerStateManager: timerStateManager)
                 .frame(maxWidth: .infinity)
-                .environment(timerStateManager)
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
         .background(.black)

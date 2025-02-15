@@ -8,11 +8,11 @@
 import SwiftUI
 
 struct RoundSelectorView: View {
-    @Bindable private var timerStateManager: TimerStateManager
+    @Binding private var totalRounds: Int
     @Binding private var editModeEnabled: Bool
 
-    public init(timerStateManager: TimerStateManager, editModeEnabled: Binding<Bool>) {
-        self.timerStateManager = timerStateManager
+    public init(totalRounds: Binding<Int>, editModeEnabled: Binding<Bool>) {
+        self._totalRounds = totalRounds
         self._editModeEnabled = editModeEnabled
     }
 
@@ -25,7 +25,7 @@ struct RoundSelectorView: View {
                     .font(.title)
 
                 VStack(alignment: .center, spacing: 10) {
-                    Picker("Rounds", selection: $timerStateManager.totalRounds) {
+                    Picker("Rounds", selection: $totalRounds) {
                         ForEach(1...20, id: \.self) { round in
                             Text("\(round)")
                                 .foregroundStyle(.white)
@@ -60,7 +60,8 @@ struct RoundSelectorView: View {
 
 #Preview {
     @Previewable @State var mockIsEnabled = false
-    @Previewable var timerStateManager = TimerStateManager()
-    RoundSelectorView(timerStateManager: timerStateManager, editModeEnabled: $mockIsEnabled)
-        .environment(timerStateManager)
+    @Previewable @State var totalRounds = 3
+    RoundSelectorView(totalRounds: $totalRounds,
+                      editModeEnabled: $mockIsEnabled
+    )
 }

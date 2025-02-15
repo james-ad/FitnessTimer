@@ -8,11 +8,15 @@
 import SwiftUI
 
 struct TimeSelectorView: View {
-    @Environment(TimerStateManager.self) private var timerStateManager
     @Environment(\.dismiss) var dismiss
     @Binding var storedTime: (seconds: Int, minutes: Int)
     private let timerType: TimerType
     private let title: String
+//    private let setTime:  (Int, Int, TimerType) -> Void
+
+    // TODO: APP IS BROKEN CURRENTLY. FIX STATE ISSUES AFTER CHANING HOW STATE MANAGER IS PASSED IN
+
+
 
     init(timerType: TimerType, storedTime: Binding<(seconds: Int, minutes: Int)>) {
         self.timerType = timerType
