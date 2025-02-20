@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-enum SettingsOptions: String, CaseIterable, Identifiable {
+enum SettingsOption: String, CaseIterable, Identifiable {
     case timerSettings, appSettings
 
     var id: Self { self }
@@ -15,7 +15,7 @@ enum SettingsOptions: String, CaseIterable, Identifiable {
 
 struct SettingsView: View  {
     @Bindable private var timerStateManager: TimerStateManager
-    @State private var settingsOption: SettingsOptions = .timerSettings
+    @State private var settingsOption: SettingsOption = .timerSettings
     @Environment(\.dismiss) var dismiss
     private let settingsTitle = String(localized: "Settings")
 

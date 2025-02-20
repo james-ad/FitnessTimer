@@ -10,6 +10,9 @@ import SwiftUI
 struct RoundSelectorView: View {
     @Binding private var totalRounds: Int
     @Binding private var editModeEnabled: Bool
+    private let roundPickerLabel = String(localized: "Rounds")
+    private let saveRoundsLabel = String(localized: "Save")
+    private let title = String(localized: "Number of Rounds")
 
     public init(totalRounds: Binding<Int>, editModeEnabled: Binding<Bool>) {
         self._totalRounds = totalRounds
@@ -20,12 +23,12 @@ struct RoundSelectorView: View {
         ZStack {
             VStack(alignment: .center, spacing: 100) {
                 Spacer()
-                Text("Number of Rounds")
+                Text(title)
                     .foregroundStyle(.white)
                     .font(.title)
 
                 VStack(alignment: .center, spacing: 10) {
-                    Picker("Rounds", selection: $totalRounds) {
+                    Picker(roundPickerLabel, selection: $totalRounds) {
                         ForEach(1...20, id: \.self) { round in
                             Text("\(round)")
                                 .foregroundStyle(.white)
@@ -38,7 +41,7 @@ struct RoundSelectorView: View {
                 Button(action: {
                     editModeEnabled.toggle()
                 }) {
-                    Text("Save")
+                    Text(saveRoundsLabel)
                         .font(.callout)
                         .padding(12)
                         .foregroundStyle(.black)

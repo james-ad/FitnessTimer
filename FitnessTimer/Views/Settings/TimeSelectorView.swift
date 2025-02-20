@@ -10,21 +10,19 @@ import SwiftUI
 struct TimeSelectorView: View {
     @Environment(\.dismiss) var dismiss
     @Binding var storedTime: (seconds: Int, minutes: Int)
-    private let setTime: (TimerType) -> Void
+    private let setTime: @Sendable (TimerType) -> Void
     private let timerType: TimerType
-    private let title: String
-//    private let setTime:  (Int, Int, TimerType) -> Void
-
-    // TODO: APP IS BROKEN CURRENTLY. FIX STATE ISSUES AFTER CHANING HOW STATE MANAGER IS PASSED IN
-
-
+    private var title: String {
+        timerType == .roundTimer
+        ? String(localized: "Round time")
+        : String(localized: "Rest time")
+    }
 
     init(timerType: TimerType,
          storedTime: Binding<(seconds: Int, minutes: Int)>,
-         setTime: @escaping (TimerType) -> Void
+         setTime: @Sendable @escaping (TimerType) -> Void
     ) {
         self.timerType = timerType
-        self.title = timerType == .roundTimer ? "Round time" : "Rest time"
         self._storedTime = storedTime
         self.setTime = setTime
     }

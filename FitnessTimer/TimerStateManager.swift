@@ -121,11 +121,14 @@ typealias BindableStateManager = Bindable<TimerStateManager>
         currentRound = totalRounds
     }
 
+    @Sendable
     func setTime(forTimerType timerType: TimerType) {
         let pickerTime = timerType == .roundTimer ? roundPickerTime : restPickerTime
         let minutesInSeconds =  pickerTime.minutes * 60
         let timeInSeconds = pickerTime.seconds + minutesInSeconds
 
+        // totalSeconds is only set for the .roundTimer block because totalSeconds affects the main screen timer
+        // we only want to set the main screen timer to match round time since rest time only displays after the round finishes
         if timerType == .roundTimer {
             roundTime = timeInSeconds
             totalSeconds = roundTime

@@ -11,8 +11,6 @@ import SwiftUI
 struct SettingsTimerView: View, TimeDisplaying {
     @Bindable var timerStateManager: TimerStateManager
     @State private var editModeEnabled: Bool = false
-    @State var minutesSelected: Int = 0
-    @State var secondsSelected: Int = 0
     var timerType: TimerType
     private var title: String {
         timerType == .roundTimer ? "Round time" : "Rest time"
@@ -25,7 +23,7 @@ struct SettingsTimerView: View, TimeDisplaying {
                 .foregroundStyle(.white)
                 .multilineTextAlignment(.leading)
 
-            // timeDisplayed lives in protocol  extension
+            // timeDisplayed lives in TimeDisplaying protocol extension
             Text("\(timeDisplayed)")
                 .font(.title)
                 .foregroundStyle(.white)
@@ -41,8 +39,7 @@ struct SettingsTimerView: View, TimeDisplaying {
                 TimeSelectorView(
                     timerType: timerType,
                     storedTime: timerType == .roundTimer ? $timerStateManager.roundPickerTime : $timerStateManager.restPickerTime,
-                    setTime: timerStateManager
-                        .setTime(forTimerType:)
+                    setTime: timerStateManager.setTime(forTimerType:)
                 )
             }
         }
@@ -56,5 +53,5 @@ struct SettingsTimerView: View, TimeDisplaying {
         timerStateManager: TimerStateManager(),
         timerType: .roundTimer
     )
-        .environment(TimerStateManager())
+    .environment(TimerStateManager())
 }
