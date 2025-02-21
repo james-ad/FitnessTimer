@@ -17,8 +17,11 @@ struct ButtonRowView: View  {
     }
 
     var body: some View {
+        
+        // TODO: CHANGE THIS TO AN HGrid or LazyHGrid
+        
         HStack {
-            VStack(alignment: .center) {
+            VStack(alignment: .center, spacing: 10) {
                 RestartButon(restartTimer: timerStateManager.restartTimer)
                 
                 // Button to reset all timer settings back to 0
@@ -30,10 +33,13 @@ struct ButtonRowView: View  {
                             toggleTimer: timerStateManager.toggleTimer)
             Spacer()
 
-            SettingsButton(timerStateManager: _timerStateManager)
+            VStack(alignment: .center, spacing: 10) {
+                TimerSettingsButton(timerStateManager: _timerStateManager)
+                AppSettingsButton(timerStateManager: _timerStateManager)
+            }
         }
         .frame(maxWidth: .infinity)
-        .padding(.bottom, 50)
+    .padding(.bottom, 40)
         .safeAreaPadding()
     }
 
@@ -110,12 +116,11 @@ struct ButtonRowView: View  {
                     .cornerRadius(50)
             }
             .buttonBorderShape(.capsule)
-            .offset(y: -20)
         }
     }
 
     // MARK: Settings button
-    struct SettingsButton: View {
+    struct AppSettingsButton: View {
         @Bindable private var timerStateManager: TimerStateManager
         @State var settingsMenuIsOpen: Bool = false
 
@@ -126,6 +131,45 @@ struct ButtonRowView: View  {
         var body: some View {
             Button(action: goToSettings) {
                 Image(systemName: "gearshape")
+                    .font(.system(size: 24))
+                    .padding(12)
+                    .background(Color.black)
+                    .clipShape(Circle())
+                    .overlay(
+                        Circle().stroke(.gray, lineWidth: Constants.lineWidth)
+                    )
+            }
+            .foregroundStyle(.white)
+            .buttonBorderShape(.circle)
+            .buttonStyle(.bordered)
+            .fullScreenCover(isPresented: $settingsMenuIsOpen) {
+                SettingsView(timerStateManager: timerStateManager)
+            }
+
+        }
+
+        private func goToSettings() {
+            settingsMenuIsOpen.toggle()
+        }
+    }
+    
+    
+    
+    // TODO: ADD ABILITY TO EDIT TIMER SETTINGS FROM THIS BUTTON
+    
+    
+    // MARK: Timer Settings button
+    struct TimerSettingsButton: View {
+        @Bindable private var timerStateManager: TimerStateManager
+        @State var settingsMenuIsOpen: Bool = false
+
+        init(timerStateManager: BindableStateManager) {
+            self._timerStateManager = timerStateManager
+        }
+
+        var body: some View {
+            Button(action: goToSettings) {
+                Image(systemName: "timer")
                     .font(.system(size: 24))
                     .padding(12)
                     .background(Color.black)
