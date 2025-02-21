@@ -18,7 +18,12 @@ struct ButtonRowView: View  {
 
     var body: some View {
         HStack {
-            RestartButon(restartTimer: timerStateManager.resetTimer)
+            VStack(alignment: .center) {
+                RestartButon(restartTimer: timerStateManager.restartTimer)
+                
+                // Button to reset all timer settings back to 0
+                ResetButon(resetTimer: timerStateManager.resetTimer)
+            }
             Spacer()
 
             PlayPauseButton(buttonTitle: timerStateManager.buttonTitle,
@@ -34,6 +39,30 @@ struct ButtonRowView: View  {
 
     // MARK: BUTTON VIEWS
 
+    // MARK: Reset Button
+    struct ResetButon: View {
+        private let resetTimer: () -> Void
+        
+        init(resetTimer: @escaping () -> Void) {
+            self.resetTimer = resetTimer
+        }
+        
+        var body: some View {
+            Button(action: resetTimer) {
+                Image(systemName: "arrow.trianglehead.counterclockwise")
+                    .font(.title2)
+                    .padding(15)
+                    .background(Color.black)
+                    .clipShape(Circle())
+                    .overlay(
+                        Circle().stroke(.gray, lineWidth: Constants.lineWidth)
+                    )
+            }
+            .foregroundStyle(.white)
+            .buttonBorderShape(.circle)
+            .buttonStyle(.bordered)
+        }
+    }
     // MARK: Restart Button
     struct RestartButon: View {
         private let restartTimer: () -> Void
@@ -130,4 +159,5 @@ fileprivate enum Constants {
 #Preview {
     ContentView()
 }
+
 

@@ -30,14 +30,6 @@ typealias BindableStateManager = Bindable<TimerStateManager>
         }
     }
 
-    // MARK: Timer statuses
-    var isFinished: Bool = false
-    
-    // Might need pause status later to distinguish between pause and stop
-    var isPaused: Bool = false
-    var isRunning: Bool = false
-    var roundIsOver: Bool = true
-
     // MARK: Time settings
     var timerIsRunning: Bool = false
     var roundNumber: Int = 0
@@ -48,12 +40,28 @@ typealias BindableStateManager = Bindable<TimerStateManager>
     var roundTime: Int = 0
     var totalSeconds: Int = 0
     var totalRounds: Int = 0 {
-        didSet(newValue) {
+        didSet {
             currentRound = totalRounds
         }
     }
 
     // MARK: Timer functionality
+    func resetTimer() {
+        totalRounds = 0
+        totalSeconds = 0
+        roundTime = 0
+        restTime = 0
+        timerType = .mainTimer
+        roundFinished = false
+        restFinished = false
+        timerIsRunning = false
+    }
+    
+    func restartTimer() {
+        totalSeconds = roundTime
+        currentRound = totalRounds
+    }
+
     func switchTimer() {
         if [.mainTimer, .roundTimer].contains(self.timerType) {
             totalSeconds = restTime
@@ -72,7 +80,7 @@ typealias BindableStateManager = Bindable<TimerStateManager>
 
             if currentRound == 0 {
                 stopTimer()
-                resetTimer()
+                restartTimer()
                 timerType = .mainTimer
                 totalSeconds = roundTime
                 currentRound = totalRounds
@@ -114,11 +122,6 @@ typealias BindableStateManager = Bindable<TimerStateManager>
         cancellable = nil
         timerIsRunning = false
         buttonTitle = String(localized: "START")
-    }
-
-    func resetTimer() {
-        totalSeconds = roundTime
-        currentRound = totalRounds
     }
 
     @Sendable
