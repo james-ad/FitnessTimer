@@ -39,7 +39,7 @@ struct ButtonRowView: View  {
             }
         }
         .frame(maxWidth: .infinity)
-    .padding(.bottom, 40)
+        .padding(.bottom, 40)
         .safeAreaPadding()
     }
 
@@ -160,8 +160,8 @@ struct ButtonRowView: View  {
     
     // MARK: Timer Settings button
     struct TimerSettingsButton: View {
+        @State var editModeEnabled: Bool = false
         @Bindable private var timerStateManager: TimerStateManager
-        @State var settingsMenuIsOpen: Bool = false
 
         init(timerStateManager: BindableStateManager) {
             self._timerStateManager = timerStateManager
@@ -181,14 +181,15 @@ struct ButtonRowView: View  {
             .foregroundStyle(.white)
             .buttonBorderShape(.circle)
             .buttonStyle(.bordered)
-            .fullScreenCover(isPresented: $settingsMenuIsOpen) {
-                SettingsView(timerStateManager: timerStateManager)
+            .fullScreenCover(isPresented: $editModeEnabled) {
+                ExtractedView(timerStateManager: $timerStateManager)
+                
             }
 
         }
 
         private func goToSettings() {
-            settingsMenuIsOpen.toggle()
+            editModeEnabled.toggle()
         }
     }
 
@@ -201,7 +202,59 @@ fileprivate enum Constants {
 
 
 #Preview {
-    ContentView()
+    @Previewable @Bindable var timerStateManager = TimerStateManager()
+    ExtractedView(timerStateManager: $timerStateManager)
 }
 
 
+
+struct ExtractedView: View {
+    @State var editModeEnabled: Bool = false
+    @Bindable private var timerStateManager: TimerStateManager
+    
+    init(timerStateManager: BindableStateManager) {
+        self._timerStateManager = timerStateManager
+    }
+    
+    var body: some View {
+        Group {
+            Picker("Round Time", selection: $timerStateManager.roundPickerTime.minutes) {
+                ForEach(0..<60, id: \.self) { number in
+                    Text(String(format: "%02d", number)).tag(number)
+                        .foregroundStyle(.white)
+                        .font(.title)
+                }
+            }
+            
+            // TODO: GET THIS WORKING SO THAT IT'S AN INTERACTIVE DIGITAL CLOCK TO SET THE TIME
+            // I'm not sure why, but the numbers aren't showing up in the picker UI
+            
+            
+            Picker("Round Time", selection: $timerStateManager.roundPickerTime.seconds) {
+                ForEach(0..<60, id: \.self) { number in
+                    Text(String(format: "%02d", number)).tag(number)
+                        .foregroundStyle(.white)
+                        .font(.title)
+                }
+            }
+
+            
+            //            TimeSelectorView(
+//                timerType: .roundTimer,
+//                storedTime: $timerStateManager.roundPickerTime,
+//                setTime: timerStateManager.setTime(forTimerType:)
+//            )
+            
+            TimeSelectorView(
+                timerType: .restTimer,
+                storedTime: $timerStateManager.restPickerTime,
+                setTime: timerStateManager.setTime(forTimerType:)
+            )
+            
+            RoundSelectorView(
+                totalRounds: $timerStateManager.totalRounds,
+                editModeEnabled: $editModeEnabled
+            )
+        }
+    }
+}

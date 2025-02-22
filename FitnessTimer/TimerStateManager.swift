@@ -33,8 +33,8 @@ typealias BindableStateManager = Bindable<TimerStateManager>
     // MARK: Time settings
     var timerIsRunning: Bool = false
     var roundNumber: Int = 0
-    var restPickerTime = (seconds: 0, minutes: 0)
-    var roundPickerTime = (seconds: 0, minutes: 0)
+    var restPickerTime = (seconds: 2, minutes: 2)
+    var roundPickerTime = (seconds: 2, minutes: 2)
     var currentRound: Int = 0
     var restTime: Int = 0
     var roundTime: Int = 0
