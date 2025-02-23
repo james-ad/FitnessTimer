@@ -38,8 +38,7 @@ struct SettingsTimerView: View, TimeDisplaying {
             .fullScreenCover(isPresented: $editModeEnabled) {
                 TimeSelectorView(
                     timerType: timerType,
-                    storedTime: timerType == .roundTimer ? $timerStateManager.roundPickerTime : $timerStateManager.restPickerTime,
-                    setTime: timerStateManager.setTime(forTimerType:)
+                    storedTime: timerType == .roundTimer ? $timerStateManager.roundPickerTime : $timerStateManager.restPickerTime
                 )
             }
         }

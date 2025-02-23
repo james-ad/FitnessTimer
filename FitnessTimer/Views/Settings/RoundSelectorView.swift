@@ -12,7 +12,7 @@ struct RoundSelectorView: View {
     @Binding private var editModeEnabled: Bool
     private let roundPickerLabel = String(localized: "Rounds")
     private let saveRoundsLabel = String(localized: "Save")
-    private let title = String(localized: "Number of Rounds")
+    private let title = String(localized: "Rounds")
 
     public init(totalRounds: Binding<Int>, editModeEnabled: Binding<Bool>) {
         self._totalRounds = totalRounds
@@ -21,13 +21,13 @@ struct RoundSelectorView: View {
 
     var body: some View {
         ZStack {
-            VStack(alignment: .center, spacing: 100) {
+            VStack(alignment: .center, spacing: 0) {
                 Spacer()
                 Text(title)
                     .foregroundStyle(.white)
                     .font(.title)
-
-                VStack(alignment: .center, spacing: 10) {
+                    .padding(.bottom, 0)
+                
                     Picker(roundPickerLabel, selection: $totalRounds) {
                         ForEach(1...20, id: \.self) { round in
                             Text("\(round)")
@@ -36,28 +36,28 @@ struct RoundSelectorView: View {
                         }
                     }
                     .pickerStyle(.wheel)
-                }
+                    .padding(.top, 0)
 
-                Button(action: {
-                    editModeEnabled.toggle()
-                }) {
-                    Text(saveRoundsLabel)
-                        .font(.callout)
-                        .padding(12)
-                        .foregroundStyle(.black)
-                        .background(.white)
-                        .clipShape(RoundedRectangle(cornerRadius: 8))
-                }
-                .buttonBorderShape(.roundedRectangle)
+//                Button(action: {
+//                    editModeEnabled.toggle()
+//                }) {
+//                    Text(saveRoundsLabel)
+//                        .font(.callout)
+//                        .padding(12)
+//                        .foregroundStyle(.black)
+//                        .background(.white)
+//                        .clipShape(RoundedRectangle(cornerRadius: 8))
+//                }
+//                .buttonBorderShape(.roundedRectangle)
 
 
                 Spacer()
             }
             .background(Color.black)
-            .frame(maxWidth: .infinity, maxHeight: .infinity)
+            .frame(maxWidth: .infinity)
         }
         .background(.black)
-        .frame(maxWidth: .infinity, maxHeight: .infinity)
+        .frame(maxWidth: .infinity)
     }
 }
 

@@ -10,7 +10,6 @@ import SwiftUI
 struct TimeSelectorView: View {
     @Environment(\.dismiss) var dismiss
     @Binding var storedTime: (seconds: Int, minutes: Int)
-    private let setTime: @Sendable (TimerType) -> Void
     private let timerType: TimerType
     private var title: String {
         timerType == .roundTimer
@@ -19,17 +18,21 @@ struct TimeSelectorView: View {
     }
 
     init(timerType: TimerType,
-         storedTime: Binding<(seconds: Int, minutes: Int)>,
-         setTime: @Sendable @escaping (TimerType) -> Void
+         storedTime: Binding<(seconds: Int, minutes: Int)>
     ) {
         self.timerType = timerType
         self._storedTime = storedTime
-        self.setTime = setTime
     }
-
+    
+    
+    // MARK: Temp constants until I can organize them better
+    private let pickerHorizontalPadding: CGFloat = 100
+    private let kerning: CGFloat = 3
+    private let pickerHorizontalOffset: CGFloat = 10
+    
     var body: some View {
         ZStack(alignment: .center) {
-            VStack(alignment: .center, spacing: 100) {
+            VStack(alignment: .center, spacing: 0) {
                 Spacer()
                 Text(title)
                     .foregroundStyle(.white)
@@ -37,58 +40,43 @@ struct TimeSelectorView: View {
 
                 // MARK: Minutes
                 HStack {
-                    VStack(alignment: .center, spacing: 30) {
                         Picker("Minutes", selection: $storedTime.minutes) {
                             ForEach(0..<60, id: \.self) { number in
-                                Text("\(number)").tag(number)
+                                Text(String(format: "%02d", number)).tag(number)
+                                    .kerning(kerning)
                                     .foregroundStyle(.white)
                                     .font(.title)
+                                    .offset(x: pickerHorizontalOffset)
                             }
                             .background(.black)
                         }
                         .pickerStyle(.wheel)
-
-                        Text("Minutes")
+                        .padding(.leading, pickerHorizontalPadding)
+                        
+                        Text(":")
                             .foregroundStyle(.white)
-                            .font(.title2)
-
-                    }
-                    .frame(maxWidth: .infinity, maxHeight: .infinity)
+                            .font(.largeTitle)
+                            .background(.clear)
 
                     // MARK: Seconds
-                    VStack(alignment: .center, spacing: 30) {
                         Picker("Seconds", selection: $storedTime.seconds) {
                             ForEach(0..<60, id: \.self) { number in
-                                Text("\(number)").tag(number)
+                                Text(String(format: "%02d", number)).tag(number)
+                                    .kerning(kerning)
                                     .foregroundStyle(.white)
                                     .font(.title)
+                                    .offset(x: -pickerHorizontalOffset)
                             }
                             .background(.black)
                         }
                         .pickerStyle(.wheel)
+                        .padding(.trailing, pickerHorizontalPadding)
 
-                        Text("Seconds")
-                            .foregroundStyle(.white)
-                            .font(.title2)
+//                        Text("Seconds")
+//                            .foregroundStyle(.white)
+//                            .font(.title2)
 
-                    }
-                    .frame(maxWidth: .infinity, maxHeight: .infinity)
                 }
-
-                // MARK: Save button
-                Button(
-                    action: {
-                        setTime(timerType)
-                        dismiss()
-                    }) {
-                        Text("Save")
-                            .font(.callout)
-                            .padding(12)
-                            .foregroundStyle(.black)
-                            .background(.white)
-                            .clipShape(RoundedRectangle(cornerRadius: 8))
-                    }
-                    .buttonBorderShape(.roundedRectangle)
 
                 Spacer()
             }
@@ -105,8 +93,7 @@ struct TimeSelectorView: View {
     @Previewable @State var timerStateManager = TimerStateManager()
     TimeSelectorView(
         timerType: .roundTimer,
-        storedTime: $timerStateManager.roundPickerTime,
-        setTime: timerStateManager.setTime(forTimerType:)
+        storedTime: $timerStateManager.roundPickerTime
     )
     .environment(timerStateManager)
 }

@@ -162,7 +162,7 @@ struct ButtonRowView: View  {
     struct TimerSettingsButton: View {
         @State var editModeEnabled: Bool = false
         @Bindable private var timerStateManager: TimerStateManager
-
+        
         init(timerStateManager: BindableStateManager) {
             self._timerStateManager = timerStateManager
         }
@@ -182,7 +182,7 @@ struct ButtonRowView: View  {
             .buttonBorderShape(.circle)
             .buttonStyle(.bordered)
             .fullScreenCover(isPresented: $editModeEnabled) {
-                ExtractedView(timerStateManager: $timerStateManager)
+                ExtractedView(timerStateManager: $timerStateManager, setTime: timerStateManager.setTime)
                 
             }
 
@@ -203,7 +203,9 @@ fileprivate enum Constants {
 
 #Preview {
     @Previewable @Bindable var timerStateManager = TimerStateManager()
-    ExtractedView(timerStateManager: $timerStateManager)
+    ExtractedView(timerStateManager: $timerStateManager,
+                  setTime: timerStateManager.setTime
+    )
 }
 
 
@@ -211,50 +213,50 @@ fileprivate enum Constants {
 struct ExtractedView: View {
     @State var editModeEnabled: Bool = false
     @Bindable private var timerStateManager: TimerStateManager
+    private let setTime: @Sendable () -> Void
+    @Environment(\.dismiss) private var dismiss
     
-    init(timerStateManager: BindableStateManager) {
+    init(timerStateManager: BindableStateManager,
+         setTime: @Sendable @escaping () -> Void
+    ) {
         self._timerStateManager = timerStateManager
+        self.setTime = setTime
     }
     
     var body: some View {
-        Group {
-            Picker("Round Time", selection: $timerStateManager.roundPickerTime.minutes) {
-                ForEach(0..<60, id: \.self) { number in
-                    Text(String(format: "%02d", number)).tag(number)
-                        .foregroundStyle(.white)
-                        .font(.title)
-                }
-            }
-            
-            // TODO: GET THIS WORKING SO THAT IT'S AN INTERACTIVE DIGITAL CLOCK TO SET THE TIME
-            // I'm not sure why, but the numbers aren't showing up in the picker UI
-            
-            
-            Picker("Round Time", selection: $timerStateManager.roundPickerTime.seconds) {
-                ForEach(0..<60, id: \.self) { number in
-                    Text(String(format: "%02d", number)).tag(number)
-                        .foregroundStyle(.white)
-                        .font(.title)
-                }
-            }
-
-            
-            //            TimeSelectorView(
-//                timerType: .roundTimer,
-//                storedTime: $timerStateManager.roundPickerTime,
-//                setTime: timerStateManager.setTime(forTimerType:)
-//            )
+        VStack(alignment: .center, spacing: 0) {
+            TimeSelectorView(
+                timerType: .roundTimer,
+                storedTime: $timerStateManager.roundPickerTime
+            )
             
             TimeSelectorView(
                 timerType: .restTimer,
-                storedTime: $timerStateManager.restPickerTime,
-                setTime: timerStateManager.setTime(forTimerType:)
+                storedTime: $timerStateManager.restPickerTime
             )
             
             RoundSelectorView(
                 totalRounds: $timerStateManager.totalRounds,
                 editModeEnabled: $editModeEnabled
             )
+            
+            Spacer()
+            
+            Button(
+                               action: {
+                                   setTime()
+                                   dismiss()
+                               }) {
+                                   Text("Save")
+                                       .font(.callout)
+                                       .padding(12)
+                                       .foregroundStyle(.black)
+                                       .background(.white)
+                                       .clipShape(RoundedRectangle(cornerRadius: 8))
+                               }
+                               .buttonBorderShape(.roundedRectangle)
         }
+        .background(.black)
+        .safeAreaPadding(.bottom)
     }
 }
