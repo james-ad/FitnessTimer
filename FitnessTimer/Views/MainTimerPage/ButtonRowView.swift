@@ -210,6 +210,8 @@ fileprivate enum Constants {
 
 
 
+// TODO: RENAME VIEW AND FIX SPACING AND SIZING OF SUBVIEWS
+
 struct ExtractedView: View {
     @State var editModeEnabled: Bool = false
     @Bindable private var timerStateManager: TimerStateManager
