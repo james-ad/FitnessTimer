@@ -29,7 +29,7 @@ struct RoundSelectorView: View {
                     .padding(.bottom, 0)
                 
                     Picker(roundPickerLabel, selection: $totalRounds) {
-                        ForEach(1...20, id: \.self) { round in
+                        ForEach(0...20, id: \.self) { round in
                             Text("\(round)")
                                 .foregroundStyle(.white)
                                 .font(.largeTitle)

@@ -55,6 +55,7 @@ typealias BindableStateManager = Bindable<TimerStateManager>
         roundFinished = false
         restFinished = false
         timerIsRunning = false
+        buttonTitle = String(localized: "START")
     }
     
     func restartTimer() {
