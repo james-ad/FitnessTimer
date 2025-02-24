@@ -182,7 +182,7 @@ struct ButtonRowView: View  {
             .buttonBorderShape(.circle)
             .buttonStyle(.bordered)
             .fullScreenCover(isPresented: $editModeEnabled) {
-                ExtractedView(timerStateManager: $timerStateManager, setTime: timerStateManager.setTime)
+                TimerSettingsView(timerStateManager: $timerStateManager, setTime: timerStateManager.setTime)
                 
             }
 
@@ -203,17 +203,12 @@ fileprivate enum Constants {
 
 #Preview {
     @Previewable @Bindable var timerStateManager = TimerStateManager()
-    ExtractedView(timerStateManager: $timerStateManager,
+    TimerSettingsView(timerStateManager: $timerStateManager,
                   setTime: timerStateManager.setTime
     )
 }
 
-
-
-// TODO: RENAME VIEW AND FIX SPACING AND SIZING OF SUBVIEWS
-
-
-struct ExtractedView: View {
+struct TimerSettingsView: View {
     @State var editModeEnabled: Bool = false
     @Bindable private var timerStateManager: TimerStateManager
     private let setTime: @Sendable () -> Void
@@ -227,39 +222,45 @@ struct ExtractedView: View {
     }
     
     var body: some View {
-        VStack(alignment: .center, spacing: 0) {
+        VStack(alignment: .center, spacing: 10) {
+            
             TimeSelectorView(
                 timerType: .roundTimer,
                 storedTime: $timerStateManager.roundPickerTime
             )
+            .containerRelativeFrame(.vertical, alignment: .center) { height, _ in height / 4 }
             
             TimeSelectorView(
                 timerType: .restTimer,
                 storedTime: $timerStateManager.restPickerTime
             )
+            .containerRelativeFrame(.vertical, alignment: .center) { height, _ in height / 4 }
             
             RoundSelectorView(
                 totalRounds: $timerStateManager.totalRounds,
                 editModeEnabled: $editModeEnabled
             )
+            .containerRelativeFrame(.vertical, alignment: .center) { height, _ in height / 4 }
             
             Spacer()
             
             Button(
-                               action: {
-                                   setTime()
-                                   dismiss()
-                               }) {
-                                   Text("Save")
-                                       .font(.callout)
-                                       .padding(12)
-                                       .foregroundStyle(.black)
-                                       .background(.white)
-                                       .clipShape(RoundedRectangle(cornerRadius: 8))
-                               }
-                               .buttonBorderShape(.roundedRectangle)
+                action: {
+                    setTime()
+                    dismiss()
+                }) {
+                    Text("Save")
+                        .font(.callout)
+                        .padding(12)
+                        .foregroundStyle(.black)
+                        .background(.white)
+                        .clipShape(RoundedRectangle(cornerRadius: 8))
+                }
+                .buttonBorderShape(.roundedRectangle)
+                .padding(.bottom)
+            
+            Spacer()
         }
         .background(.black)
-        .safeAreaPadding(.bottom)
     }
 }
