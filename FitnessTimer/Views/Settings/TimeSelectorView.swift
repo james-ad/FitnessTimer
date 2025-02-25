@@ -32,11 +32,12 @@ struct TimeSelectorView: View {
     
     var body: some View {
         ZStack(alignment: .center) {
-            VStack(alignment: .center, spacing: 0) {
+            VStack(alignment: .center, spacing: 1) {
                 Spacer()
                 Text(title)
                     .foregroundStyle(.white)
-                    .font(.title)
+                    .font(.largeTitle)
+                    .kerning(5)
 
                 // MARK: Minutes
                 HStack {
@@ -71,17 +72,11 @@ struct TimeSelectorView: View {
                         }
                         .pickerStyle(.wheel)
                         .padding(.trailing, pickerHorizontalPadding)
-
-//                        Text("Seconds")
-//                            .foregroundStyle(.white)
-//                            .font(.title2)
-
                 }
 
                 Spacer()
             }
             .frame(maxWidth: .infinity, maxHeight: .infinity)
-            .offset(y: 20)
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
         .background(.black)

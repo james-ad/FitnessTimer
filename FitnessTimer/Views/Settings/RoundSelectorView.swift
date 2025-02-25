@@ -10,7 +10,6 @@ import SwiftUI
 struct RoundSelectorView: View {
     @Binding private var totalRounds: Int
     @Binding private var editModeEnabled: Bool
-    private let roundPickerLabel = String(localized: "Rounds")
     private let saveRoundsLabel = String(localized: "Save")
     private let title = String(localized: "Rounds")
     
@@ -21,14 +20,14 @@ struct RoundSelectorView: View {
     
     var body: some View {
         VStack(alignment: .center, spacing: 0) {
-            Spacer()
-            
             Text(title)
                 .foregroundStyle(.white)
-                .font(.title)
+                .font(.largeTitle)
+                .kerning(6)
+                .background(.black)
                 .offset(y: 10)
-            
-            Picker(roundPickerLabel, selection: $totalRounds) {
+
+            Picker(title, selection: $totalRounds) {
                 ForEach(0...20, id: \.self) { round in
                     Text("\(round)")
                         .foregroundStyle(.white)
@@ -36,21 +35,27 @@ struct RoundSelectorView: View {
                 }
             }
             .pickerStyle(.wheel)
-            .padding(.top, 0)
-            .offset(y: -20)
-            
+            .scaledToFit()
+
             Spacer()
-            
         }
+        .safeAreaPadding()
         .background(Color.black)
         .frame(maxWidth: .infinity, alignment: .center)
     }
 }
 
+//#Preview {
+//    @Previewable @State var mockIsEnabled = false
+//    @Previewable @State var totalRounds = 3
+//    RoundSelectorView(totalRounds: $totalRounds,
+//                      editModeEnabled: $mockIsEnabled
+//    )
+//}
+
 #Preview {
-    @Previewable @State var mockIsEnabled = false
-    @Previewable @State var totalRounds = 3
-    RoundSelectorView(totalRounds: $totalRounds,
-                      editModeEnabled: $mockIsEnabled
+    @Previewable @Bindable var timerStateManager = TimerStateManager()
+    TimerSettingsView(timerStateManager: $timerStateManager,
+                      setTime: timerStateManager.setTime
     )
 }

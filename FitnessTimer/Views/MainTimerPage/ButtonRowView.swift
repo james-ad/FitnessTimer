@@ -153,11 +153,6 @@ struct ButtonRowView: View  {
         }
     }
     
-    
-    
-    // TODO: ADD ABILITY TO EDIT TIMER SETTINGS FROM THIS BUTTON
-    
-    
     // MARK: Timer Settings button
     struct TimerSettingsButton: View {
         @State var editModeEnabled: Bool = false
@@ -206,61 +201,4 @@ fileprivate enum Constants {
     TimerSettingsView(timerStateManager: $timerStateManager,
                   setTime: timerStateManager.setTime
     )
-}
-
-struct TimerSettingsView: View {
-    @State var editModeEnabled: Bool = false
-    @Bindable private var timerStateManager: TimerStateManager
-    private let setTime: @Sendable () -> Void
-    @Environment(\.dismiss) private var dismiss
-    
-    init(timerStateManager: BindableStateManager,
-         setTime: @Sendable @escaping () -> Void
-    ) {
-        self._timerStateManager = timerStateManager
-        self.setTime = setTime
-    }
-    
-    var body: some View {
-        VStack(alignment: .center, spacing: 10) {
-            
-            TimeSelectorView(
-                timerType: .roundTimer,
-                storedTime: $timerStateManager.roundPickerTime
-            )
-            .containerRelativeFrame(.vertical, alignment: .center) { height, _ in height / 4 }
-            
-            TimeSelectorView(
-                timerType: .restTimer,
-                storedTime: $timerStateManager.restPickerTime
-            )
-            .containerRelativeFrame(.vertical, alignment: .center) { height, _ in height / 4 }
-            
-            RoundSelectorView(
-                totalRounds: $timerStateManager.totalRounds,
-                editModeEnabled: $editModeEnabled
-            )
-            .containerRelativeFrame(.vertical, alignment: .center) { height, _ in height / 4 }
-            
-            Spacer()
-            
-            Button(
-                action: {
-                    setTime()
-                    dismiss()
-                }) {
-                    Text("Save")
-                        .font(.callout)
-                        .padding(12)
-                        .foregroundStyle(.black)
-                        .background(.white)
-                        .clipShape(RoundedRectangle(cornerRadius: 8))
-                }
-                .buttonBorderShape(.roundedRectangle)
-                .padding(.bottom)
-            
-            Spacer()
-        }
-        .background(.black)
-    }
 }
