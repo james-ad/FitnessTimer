@@ -17,8 +17,39 @@ struct TimerView: View, TimeDisplaying {
             Circle()
                 .stroke(.gray, style: StrokeStyle(lineWidth: 10))
                 .zIndex(1)
+            /*
+             Task:
+                - To draw a circle around the timer view and use the .trim() view modifier
+             to trim the new green circle.
 
-            VStack(alignment: .center, spacing: 20) {
+                - Each iteration will use the following formula:
+                    - trim(from: 0, to: (totalCurrentTimeInSeconds * 100))
+
+             200 seconds
+                100 * 200 = 20000
+                199 seconds
+                100 * 199 = 19900
+                0 -> 20000
+                0 -> 19900
+
+
+
+             120 seconds
+                100 * 120 = 12000
+                100 * 119 = 11900
+
+
+             */
+
+            // TODO: FIGURE OUT HOW TO RERENDER THE CIRCLE EACH TIME THE VALUE IS UPDATED
+            // TODO: ALSO SUBSCRIBE TO THE STATE MANAGER'S PUBLISHER
+
+            Circle()
+                .trim(from: 0, to: CGFloat(100 * timerStateManager.totalSeconds))
+                .stroke(.green, style: StrokeStyle(lineWidth: 10))
+                .zIndex(1)
+
+            VStack(alignment: .center, spacing: 10) {
 
                 Text(timeDisplayed)
                     .frame(maxWidth: .infinity)
@@ -26,7 +57,6 @@ struct TimerView: View, TimeDisplaying {
                     .foregroundStyle(.white)
                     .multilineTextAlignment(.center)
                     .tracking(5)
-
 
                 VStack(alignment: .center, spacing: 20) {
                     Text(timerStateManager.roundTitle)
@@ -45,7 +75,6 @@ struct TimerView: View, TimeDisplaying {
                 .offset(y: 30)
             }
             .aspectRatio(contentMode: .fit)
-            .offset(y: 20)
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
         .background(.black)

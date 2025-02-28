@@ -11,14 +11,17 @@ import SwiftUI
 typealias BindableStateManager = Bindable<TimerStateManager>
 
 @Observable class TimerStateManager {
+
     // MARK: Private properties
-    @ObservationIgnored private var cancellable: Cancellable?
-    private var timerType: TimerType = .mainTimer
-    private var roundFinished: Bool = false
     private var restFinished: Bool = false
+    private var roundFinished: Bool = false
+    private var timerType: TimerType = .mainTimer
+
+    var eventSubscription: Cancellable?
 
     // MARK: Timer labels
     var buttonTitle = String(localized: "START")
+
     var roundTitle: String {
         switch self.timerType {
             case .mainTimer:
@@ -39,6 +42,7 @@ typealias BindableStateManager = Bindable<TimerStateManager>
     var restTime: Int = 0
     var roundTime: Int = 0
     var totalSeconds: Int = 0
+
     var totalRounds: Int = 0 {
         didSet {
             currentRound = totalRounds
@@ -46,6 +50,24 @@ typealias BindableStateManager = Bindable<TimerStateManager>
     }
 
     // MARK: Timer functionality
+    // Private
+    private func updateRounds() {
+        if roundFinished && restFinished {
+            currentRound -= 1
+            roundFinished.toggle()
+            restFinished.toggle()
+
+            if currentRound == 0 {
+                stopTimer()
+                restartTimer()
+                timerType = .mainTimer
+                totalSeconds = roundTime
+                currentRound = totalRounds
+            }
+        }
+    }
+
+    // Internal
     func resetTimer() {
         totalRounds = 0
         totalSeconds = 0
@@ -74,19 +96,7 @@ typealias BindableStateManager = Bindable<TimerStateManager>
             restFinished = true
         }
 
-        if roundFinished && restFinished {
-            currentRound -= 1
-            roundFinished.toggle()
-            restFinished.toggle()
-
-            if currentRound == 0 {
-                stopTimer()
-                restartTimer()
-                timerType = .mainTimer
-                totalSeconds = roundTime
-                currentRound = totalRounds
-            }
-        }
+        updateRounds()
     }
 
     func toggleTimer() {
@@ -98,7 +108,7 @@ typealias BindableStateManager = Bindable<TimerStateManager>
     }
     
     func startTimer() {
-        cancellable = Timer
+        eventSubscription = Timer
             .publish(every: 1, on: .main, in: .common)
             .autoconnect()
             .prefix(while: { [weak self] _ in
@@ -119,8 +129,8 @@ typealias BindableStateManager = Bindable<TimerStateManager>
     }
 
     func stopTimer() {
-        cancellable?.cancel()
-        cancellable = nil
+        eventSubscription?.cancel()
+        eventSubscription = nil
         timerIsRunning = false
         buttonTitle = String(localized: "START")
     }
