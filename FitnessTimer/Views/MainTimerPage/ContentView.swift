@@ -13,7 +13,7 @@ struct ContentView: View {
     var body: some View {
         VStack(alignment: .center) {
             Spacer()
-            TimerView()
+            TimerView(remainingTimeInSeconds: $timerStateManager.totalSeconds)
                 .frame(maxWidth: .infinity)
                 .environment(timerStateManager)
             Spacer()

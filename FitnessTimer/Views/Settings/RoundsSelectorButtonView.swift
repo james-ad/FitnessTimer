@@ -37,9 +37,7 @@ struct RoundsSelectorButtonView: View {
                     .imageScale(.large)
             }
             .fullScreenCover(isPresented: $editModeEnabled) {
-                RoundSelectorView(totalRounds: $totalRounds,
-                                  editModeEnabled: $editModeEnabled
-                )
+                RoundSelectorView(totalRounds: $totalRounds)
             }
         }
         .background(.black)

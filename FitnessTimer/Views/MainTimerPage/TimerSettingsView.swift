@@ -10,7 +10,6 @@ import Combine
 import SwiftUI
 
 struct TimerSettingsView: View {
-    @State var editModeEnabled: Bool = false
     @Bindable private var timerStateManager: TimerStateManager
     private let setTime: @Sendable () -> Void
     @Environment(\.dismiss) private var dismiss
@@ -38,10 +37,7 @@ struct TimerSettingsView: View {
             )
             .containerRelativeFrame(.vertical, alignment: .center) { height, _ in height / 4 }
             
-            RoundSelectorView(
-                totalRounds: $timerStateManager.totalRounds,
-                editModeEnabled: $editModeEnabled
-            )
+            RoundSelectorView(totalRounds: $timerStateManager.totalRounds)
             .containerRelativeFrame(.vertical, alignment: .center) { height, _ in height / 4 }
             
             Spacer()

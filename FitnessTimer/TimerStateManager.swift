@@ -15,9 +15,12 @@ typealias BindableStateManager = Bindable<TimerStateManager>
     // MARK: Private properties
     private var restFinished: Bool = false
     private var roundFinished: Bool = false
-    private var timerType: TimerType = .mainTimer
+    var timerType: TimerType = .mainTimer
 
-    var eventSubscription: Cancellable?
+    var subscription: Cancellable?
+    var publisher = Timer
+        .publish(every: 1, on: .main, in: .common)
+        .autoconnect()
 
     // MARK: Timer labels
     var buttonTitle = String(localized: "START")
@@ -38,12 +41,12 @@ typealias BindableStateManager = Bindable<TimerStateManager>
     var roundNumber: Int = 0
     var restPickerTime = (seconds: 2, minutes: 2)
     var roundPickerTime = (seconds: 2, minutes: 2)
-    var currentRound: Int = 0
+    var currentRound: Int = 2
     var restTime: Int = 0
     var roundTime: Int = 0
     var totalSeconds: Int = 0
 
-    var totalRounds: Int = 0 {
+    var totalRounds: Int = 2 {
         didSet {
             currentRound = totalRounds
         }
@@ -108,10 +111,8 @@ typealias BindableStateManager = Bindable<TimerStateManager>
     }
     
     func startTimer() {
-        eventSubscription = Timer
-            .publish(every: 1, on: .main, in: .common)
-            .autoconnect()
-            .prefix(while: { [weak self] _ in
+
+        subscription = publisher.prefix(while: { [weak self] _ in
                 guard let self else { return false }
                 return currentRound > 0
             })
@@ -129,8 +130,8 @@ typealias BindableStateManager = Bindable<TimerStateManager>
     }
 
     func stopTimer() {
-        eventSubscription?.cancel()
-        eventSubscription = nil
+        subscription?.cancel()
+        subscription = nil
         timerIsRunning = false
         buttonTitle = String(localized: "START")
     }

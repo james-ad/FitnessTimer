@@ -9,13 +9,11 @@ import SwiftUI
 
 struct RoundSelectorView: View {
     @Binding private var totalRounds: Int
-    @Binding private var editModeEnabled: Bool
     private let saveRoundsLabel = String(localized: "Save")
     private let title = String(localized: "Rounds")
     
-    public init(totalRounds: Binding<Int>, editModeEnabled: Binding<Bool>) {
+    public init(totalRounds: Binding<Int>) {
         self._totalRounds = totalRounds
-        self._editModeEnabled = editModeEnabled
     }
     
     var body: some View {
@@ -48,9 +46,7 @@ struct RoundSelectorView: View {
 //#Preview {
 //    @Previewable @State var mockIsEnabled = false
 //    @Previewable @State var totalRounds = 3
-//    RoundSelectorView(totalRounds: $totalRounds,
-//                      editModeEnabled: $mockIsEnabled
-//    )
+//    RoundSelectorView(totalRounds: $totalRounds)
 //}
 
 #Preview {

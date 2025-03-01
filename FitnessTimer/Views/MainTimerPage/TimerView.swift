@@ -10,13 +10,22 @@ import SwiftUI
 
 struct TimerView: View, TimeDisplaying {
     @Environment(TimerStateManager.self) var timerStateManager
+    @Binding var remainingTimeInSeconds: Int
     var timerType: TimerType = .mainTimer
+    private var timerGauge: Int {
+        if [.mainTimer, .roundTimer].contains(timerStateManager.timerType) {
+            return max(1, timerStateManager.roundTime)
+        } else {
+            return max(1, timerStateManager.restTime)
+        }
+    }
+
 
     var body: some View {
         ZStack {
             Circle()
                 .stroke(.gray, style: StrokeStyle(lineWidth: 10))
-                .zIndex(1)
+//                .zIndex(1)
             /*
              Task:
                 - To draw a circle around the timer view and use the .trim() view modifier
@@ -45,9 +54,17 @@ struct TimerView: View, TimeDisplaying {
             // TODO: ALSO SUBSCRIBE TO THE STATE MANAGER'S PUBLISHER
 
             Circle()
-                .trim(from: 0, to: CGFloat(100 * timerStateManager.totalSeconds))
-                .stroke(.green, style: StrokeStyle(lineWidth: 10))
-                .zIndex(1)
+                .trim(from: 0, to: CGFloat(remainingTimeInSeconds) / CGFloat(timerGauge))
+                .stroke(.green,
+                        style: StrokeStyle(
+                            lineWidth: 10,
+                            lineCap: .round,
+                            lineJoin: .round)
+                )
+                .rotationEffect(.degrees(360))
+                .rotationEffect(.degrees(-90))
+                .animation(.easeOut, value: remainingTimeInSeconds)
+//                .zIndex(1)
 
             VStack(alignment: .center, spacing: 10) {
 
