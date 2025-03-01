@@ -61,10 +61,9 @@ struct TimerView: View, TimeDisplaying {
                             lineCap: .round,
                             lineJoin: .round)
                 )
-                .rotationEffect(.degrees(360))
-                .rotationEffect(.degrees(-90))
-                .animation(.easeOut, value: remainingTimeInSeconds)
-//                .zIndex(1)
+                .rotationEffect(.degrees(90))
+                .rotation3DEffect(.degrees(180), axis: (x: 1, y: 0, z: 0))
+                .animation(.easeInOut, value: remainingTimeInSeconds)
 
             VStack(alignment: .center, spacing: 10) {
 
